@@ -1,6 +1,5 @@
 package dao;
 
-
 import entities.Project;
 import entities.Task;
 
