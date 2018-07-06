@@ -24,5 +24,5 @@ public interface TaskDAO {
 
     public List<Task> getChildTasks(Task task);
 
-    public boolean getReadinessOfTask()
+    public boolean getReadinessOfTask();
 }
