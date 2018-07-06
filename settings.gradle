@@ -1,2 +1,6 @@
 rootProject.name = 'studyProject'
+include 'domain'
+include 'service'
+include 'service'
+include 'app'
 

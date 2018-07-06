@@ -19,6 +19,14 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="app_main" target="1.5" />
+      <module name="app_test" target="1.5" />
+      <module name="core_main" target="1.5" />
+      <module name="core_test" target="1.5" />
+      <module name="domain_main" target="1.8" />
+      <module name="domain_test" target="1.8" />
+      <module name="service_main" target="1.5" />
+      <module name="service_test" target="1.5" />
       <module name="studyProject_main" target="1.5" />
       <module name="studyProject_test" target="1.5" />
     </bytecodeTargetLevel>
