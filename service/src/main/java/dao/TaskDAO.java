@@ -1,7 +1,9 @@
 package dao;
 
 import entities.Task;
+import entities.TaskId;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -10,21 +12,14 @@ import java.util.List;
  */
 public interface TaskDAO {
 
-    public void addTask(Task task);
+    Task saveTask(Task task);
 
-    public void updateTask(Task task);
+    void deleteTask(Task task);
 
-    public void deleteTask(Task task);
+    Task getTask(TaskId id);
 
-    public Task getParentTask(Task task);
+    List<Task> getTasksByFinishDate(LocalDateTime time);
 
-    public List<Task> getTasksByDeadline(Date deadline);
-
-    public List<Task> getTasksByRemindDate(Date remindDate);
-
-    public List<Task> getChildTasks(Task task);
-
-    public boolean getReadinessOfTask();
-
+    List<Task> getTasksByRemindDate(LocalDateTime time);
 
 }

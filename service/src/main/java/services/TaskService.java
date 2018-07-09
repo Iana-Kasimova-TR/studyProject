@@ -7,10 +7,12 @@ import entities.Task;
  */
 public interface TaskService {
 
-    public void createTask(String title);
+    Task createTask(String title);
 
-    public void changeTask(Task task);
+    Task saveTask(Task task);
 
-    public void deleteTask(Task task);
+    void deleteTask(Task task);
+
+    Task createSubTask(Task parentTask, String title);
 
 }

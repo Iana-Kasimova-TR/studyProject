@@ -1,8 +1,7 @@
 package entities;
 
 
-import utils.Priority;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,21 +13,20 @@ public class Task {
     private String description;
     private String title;
     private boolean isDone;
-    private List<Task> subTasks;
+    private List<Task> subTasks = new ArrayList<>();
     private Date deadline;
     private Date remindDate;
     private Priority priority;
     private float percentOfReadiness;
-
-    public Task(String title, Date deadline) {
-        this.title = title;
-        this.deadline = deadline;
-    }
+    private Task parentTask;
+    private final TaskId id;
+    private Project project;
 
     public Task(String title) {
-        this.title = title;
-    }
 
+        this.title = title;
+        this.id = new TaskId();
+    }
 
     public String getDescription() {
         return description;
@@ -93,4 +91,16 @@ public class Task {
     public void setPercentOfReadiness(float percentOfReadiness) {
         this.percentOfReadiness = percentOfReadiness;
     }
+
+    public Task getParentTask() {
+        return parentTask;
+    }
+
+    public Project getProject() { return project; }
+
+    public void setProject(Project project) { this.project = project; }
+
+    public void setParentTask(Task parentTask) { this.parentTask = parentTask; }
+
+    public TaskId getId() { return id; }
 }

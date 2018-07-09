@@ -1,6 +1,7 @@
 package dao;
 
 import entities.Project;
+import entities.ProjectId;
 import entities.Task;
 
 /**
@@ -8,13 +9,10 @@ import entities.Task;
  */
 public interface ProjectDAO {
 
-    public void addProject(Project project);
+    Project saveProject(Project project);
 
-    public void updateProject(Project project);
+    void deleteProject(Project project);
 
-    public void deleteProject(Project project);
+    Project getProject(ProjectId id);
 
-    public Project getProjectByTitle(String title);
-
-    public Project getProjectByTask(Task task);
 }

@@ -1,6 +1,7 @@
 package services;
 
 import entities.Project;
+import entities.ProjectId;
 import entities.Task;
 
 /**
@@ -8,15 +9,15 @@ import entities.Task;
  */
 public interface ProjectService {
 
-    public void createProject(String title);
+    Project createProject(String title);
 
-    public void addTaskToProject(Task task);
+    Project saveProject(Project project);
 
-    public void deleteTaskFromProject(Task task);
+    void deleteProject(Project project);
 
-    public void addDescriptionOfProject(String description);
+    Project addTaskToProject(Project project, Task task);
 
-    public Project getProject(String title);
+    Project deleteTaskFromProject(Project project, Task task);
 
-    public void changeProject(Project project);
+
 }

@@ -1,5 +1,7 @@
 package entities;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -8,16 +10,16 @@ import java.util.List;
  */
 public class DailyAgenda {
 
-    private Date dailyAgendaDate;
+    private final LocalDateTime dailyAgendaDate;
 
-    private List<Task> dailyTasks;
+    private final List<Task> dailyTasks;
 
-    public DailyAgenda(Date dailyDate, List<Task> dailyTasks) {
+    public DailyAgenda(LocalDateTime dailyDate, List<Task> dailyTasks) {
         this.dailyAgendaDate = dailyDate;
         this.dailyTasks = dailyTasks;
     }
 
     public List<Task> getDailyTasks() {
-        return dailyTasks;
+        return Collections.unmodifiableList(dailyTasks);
     }
 }

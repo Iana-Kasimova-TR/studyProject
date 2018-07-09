@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,10 +10,13 @@ public class Project {
 
     private String name;
     private String description;
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
+    private final ProjectId id;
 
-
-    private Task parentTask;
+    public Project(String name) {
+        this.name = name;
+        this.id = new ProjectId();
+    }
 
     public String getName() {
         return name;
@@ -34,11 +38,7 @@ public class Project {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
+    public void setTasks(List<Task> tasks) { this.tasks = tasks; }
 
-    public Task getParentTask() { return parentTask; }
-
-    public void setParentTask(Task parentTask) { this.parentTask = parentTask; }
+    public ProjectId getId() { return id; }
 }
