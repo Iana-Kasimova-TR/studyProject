@@ -13,7 +13,7 @@ public interface ProjectService {
 
     Project saveProject(Project project);
 
-    void deleteProject(Project project);
+    boolean deleteProject(Project project);
 
     Project addTaskToProject(Project project, Task task);
 

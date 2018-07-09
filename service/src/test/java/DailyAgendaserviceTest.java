@@ -4,14 +4,13 @@ import entities.Task;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import services.DailyAgendaService;
 import services.DailyAgendaServiceImpl;
 import services.TaskService;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.*;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -28,27 +27,66 @@ public class DailyAgendaserviceTest {
     private final LocalDateTime localYesterdayTime = localTodayTime.minusDays(1);
     private TaskService taskService;
     private DailyAgendaService agendaService;
+    private TaskDAO taskDAO;
 
     @Before
     public void init() {
-       taskService  = new TaskServiceImpl(mock(TaskDAO.class));
-       agendaService = new DailyAgendaServiceImpl(mock(TaskDAO.class));
-        when(taskService.
+       taskDAO = mock(TaskDAO.class);
+       taskService  = new TaskServiceImpl(taskDAO);
+       agendaService = new DailyAgendaServiceImpl(taskDAO);
     }
 
 
     @Test
-    public void createDailyAgendaTest(){
+    public void testCreateDailyAgendaWhenWeHaveTasksInThisDate(){
+        String title = "";
+        when(taskDAO.saveTask(new Task(title))).thenReturn(new Task(title));
+
         Task task1 = taskService.createTask("buy milk");
         Task task2 = taskService.createTask("buy fuits");
+
         task1.setDeadline(localTodayTime);
         task2.setDeadline(localTodayTime);
-        taskService.saveTask(task2);
-        taskService.saveTask(task1);
+        when(taskDAO.saveTask(task1)).thenReturn(task1);
+        when(taskDAO.saveTask(task2)).thenReturn(task2);
+        task1 = taskService.saveTask(task1);
+        task2 = taskService.saveTask(task2);
 
+        when(taskDAO.getTasksByFinishDate(localTodayTime)).thenReturn(Arrays.asList(task1, task2));
         DailyAgenda agenda = agendaService.createDailyAgenda(localTodayTime);
         assertThat(agenda.getDailyTasks()).isEqualTo(Arrays.asList(task1, task2));
 
     }
+
+
+    @Test
+    public void testCreateDailyAgendaWithoutTasksInThisDate(){
+        String title = "";
+        when(taskDAO.saveTask(new Task(title))).thenReturn(new Task(title));
+
+        Task task1 = taskService.createTask("buy milk");
+        Task task2 = taskService.createTask("buy fuits");
+
+        task1.setDeadline(localYesterdayTime);
+        task2.setDeadline(localYesterdayTime);
+        when(taskDAO.saveTask(task1)).thenReturn(task1);
+        when(taskDAO.saveTask(task2)).thenReturn(task2);
+        task1 = taskService.saveTask(task1);
+        task2 = taskService.saveTask(task2);
+
+        when(taskDAO.getTasksByFinishDate(localTodayTime)).thenReturn(Collections.emptyList());
+
+        DailyAgenda agenda = agendaService.createDailyAgenda(localTodayTime);
+        assertThat(agenda.getDailyTasks()).isEqualTo(Collections.emptyList());
+
+    }
+
+
+    @Test
+    public void testCreateDailyAgendaWithSpecificProjectsAndTasks(){
+        //// TODO: 10/07/2018
+    }
+
+
 
 }

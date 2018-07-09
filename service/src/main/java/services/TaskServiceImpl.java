@@ -25,7 +25,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(Task task) {
+    public boolean deleteTask(Task task) {
 
     }
 

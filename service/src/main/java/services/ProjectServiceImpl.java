@@ -1,5 +1,6 @@
 package services;
 
+import dao.ProjectDAO;
 import entities.Project;
 import entities.Task;
 
@@ -7,28 +8,46 @@ import entities.Task;
  * Created by anakasimova on 08/07/2018.
  */
 public class ProjectServiceImpl implements ProjectService {
+
+    private ProjectDAO projectDAO;
+    private TaskService taskService;
+
+    public ProjectServiceImpl(ProjectDAO projectDAO, TaskService taskService){
+        this.projectDAO = projectDAO;
+        this.taskService = taskService;
+    }
+
     @Override
     public Project createProject(String title) {
-      return null;
+      Project project = new Project(title);
+      return projectDAO.saveProject(project);
     }
 
     @Override
     public Project saveProject(Project project) {
-        return null;
+        return projectDAO.saveProject(project);
     }
 
     @Override
-    public void deleteProject(Project project) {
-
+    public boolean deleteProject(Project project) {
+        return projectDAO.deleteProject(project);
     }
 
     @Override
     public Project addTaskToProject(Project project, Task task) {
-        return null;
+        project.getTasks().add(task);
+        task.setProject(project);
+        return projectDAO.saveProject(project);
     }
 
     @Override
-    public Project deleteTaskFromProject(Project project, Task task) {
-        return null;
+    public Project deleteTaskFromProject(Project project, Task task) throws RuntimeException{
+        if(project.getTasks().contains(task) && task.getProject().equals(project)){
+            project.getTasks().remove(task);
+            task.setProject(null);
+            return projectDAO.saveProject(project);
+        }else{
+            throw new RuntimeException("in project not exist this task " + task);
+        }
     }
 }

@@ -16,7 +16,8 @@ allprojects{
                      [group: 'org.assertj', name: 'assertj-core', version: '3.10.0']
                      )
          compile(
-                     [group: 'org.mockito', name: 'mockito-all', version: '1.10.19']
+                     [group: 'org.mockito', name: 'mockito-all', version: '1.10.19'],
+                     [group: 'org.apache.commons', name: 'commons-lang3', version: '3.7']
         )
     }
 }

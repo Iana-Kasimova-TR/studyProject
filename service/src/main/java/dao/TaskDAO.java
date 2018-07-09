@@ -14,7 +14,7 @@ public interface TaskDAO {
 
     Task saveTask(Task task);
 
-    void deleteTask(Task task);
+    boolean deleteTask(Task task);
 
     Task getTask(TaskId id);
 

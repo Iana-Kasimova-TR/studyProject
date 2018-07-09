@@ -1,5 +1,8 @@
 package entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,4 +44,31 @@ public class Project {
     public void setTasks(List<Task> tasks) { this.tasks = tasks; }
 
     public ProjectId getId() { return id; }
+
+    @Override
+    public int hashCode(){
+
+        return new HashCodeBuilder(17, 37)
+                .append(name)
+                .append(description)
+                .append(tasks)
+                .append(id)
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object o){
+
+        if(o == this) return true;
+        if(!(o instanceof Project)) return false;
+
+        Project project = (Project) o;
+
+        return new EqualsBuilder()
+                .append(name, project.name)
+                .append(description, project.description)
+                .append(tasks, project.tasks)
+                .append(id, project.id)
+                .isEquals();
+    }
 }

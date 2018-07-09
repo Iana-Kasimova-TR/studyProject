@@ -1,6 +1,9 @@
 package entities;
 
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,4 +107,43 @@ public class Task {
     public void setParentTask(Task parentTask) { this.parentTask = parentTask; }
 
     public TaskId getId() { return id; }
+
+    @Override
+    public int hashCode(){
+        return new HashCodeBuilder(17,37)
+                .append(id)
+                .append(title)
+                .append(description)
+                .append(isDone)
+                .append(subTasks)
+                .append(deadline)
+                .append(remindDate)
+                .append(priority)
+                .append(percentOfReadiness)
+                .append(parentTask)
+                .append(project)
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == this) return true;
+        if(!(o instanceof Task)) return  false;
+
+        Task task = (Task) o;
+
+        return new EqualsBuilder()
+                .append(id, task.id)
+                .append(title, task.title)
+                .append(description, task.description)
+                .append(isDone, task.isDone)
+                .append(subTasks, task.subTasks)
+                .append(deadline, task.deadline)
+                .append(remindDate, task.remindDate)
+                .append(priority, task.priority)
+                .append(percentOfReadiness, task.percentOfReadiness)
+                .append(parentTask, task.parentTask)
+                .append(project, task.project)
+                .isEquals();
+    }
 }
