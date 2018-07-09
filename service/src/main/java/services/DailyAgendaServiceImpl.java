@@ -1,7 +1,6 @@
 package services;
 
 import dao.TaskDAO;
-import dao.TaskDAOImpl;
 import entities.DailyAgenda;
 import entities.Project;
 import entities.Task;
@@ -9,13 +8,18 @@ import entities.Task;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.mockito.InjectMocks;
 
 /**
  * Created by anakasimova on 08/07/2018.
  */
 public class DailyAgendaServiceImpl implements DailyAgendaService {
 
-    TaskDAO taskDAO = new TaskDAOImpl();
+    private TaskDAO taskDAO;
+
+    public DailyAgendaServiceImpl(TaskDAO taskDAO) {
+        this.taskDAO = taskDAO;
+    }
 
     @Override
     public DailyAgenda createDailyAgenda(LocalDateTime dailyDate) {

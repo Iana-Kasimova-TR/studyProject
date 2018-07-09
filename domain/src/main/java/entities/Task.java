@@ -1,6 +1,7 @@
 package entities;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,8 +15,8 @@ public class Task {
     private String title;
     private boolean isDone;
     private List<Task> subTasks = new ArrayList<>();
-    private Date deadline;
-    private Date remindDate;
+    private LocalDateTime deadline;
+    private LocalDateTime remindDate;
     private Priority priority;
     private float percentOfReadiness;
     private Task parentTask;
@@ -60,19 +61,19 @@ public class Task {
         this.subTasks = subTasks;
     }
 
-    public Date getDeadline() {
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
 
-    public Date getRemindDate() {
+    public LocalDateTime getRemindDate() {
         return remindDate;
     }
 
-    public void setRemindDate(Date remindDate) {
+    public void setRemindDate(LocalDateTime remindDate) {
         this.remindDate = remindDate;
     }
 

@@ -1,8 +1,6 @@
 package services;
 
 import dao.TaskDAO;
-import dao.TaskDAOImpl;
-import entities.DailyAgenda;
 import entities.DailyNotificationGroup;
 import entities.Project;
 import entities.Task;
