@@ -5,13 +5,17 @@ import entities.Task;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import services.ProjectService;
 import services.ProjectServiceImpl;
 import services.TaskService;
 import services.TaskServiceImpl;
 
+
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Matchers.refEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.*;
@@ -37,14 +41,15 @@ public class ProjectServiceTest {
         projectService = new ProjectServiceImpl(projectDAO);
 
         title = "Rome";
-        when(projectDAO.saveProject(new Project(title))).thenReturn(new Project(title));
+        project = new Project(title);
+        when(projectDAO.saveProject(any(Project.class))).thenReturn(project);
         project = projectService.createProject(title);
     }
 
 
     @Test
     public void testCreateProject(){
-        assertThat(project).isEqualTo(new Project("Rome"));
+        assertThat(project).isEqualTo(project);
     }
 
     @Test
