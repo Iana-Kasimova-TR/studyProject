@@ -14,6 +14,8 @@ public interface TaskService {
 
     boolean deleteTask(Task task);
 
-    Task createSubTask(Task parentTask, String title);
+    Task addSubTask(Task parentTask, String title);
+
+    Task deleteSubTask(Task parentTask, Task subTask);
 
 }

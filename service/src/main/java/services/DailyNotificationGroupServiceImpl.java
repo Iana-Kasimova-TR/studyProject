@@ -14,7 +14,11 @@ import java.util.List;
  */
 public class DailyNotificationGroupServiceImpl implements DailyNotificationGroupService {
 
-    TaskDAO taskDAO = new TaskDAOImpl();
+    TaskDAO taskDAO;
+
+    public DailyNotificationGroupServiceImpl(TaskDAO taskDAO) {
+        this.taskDAO = taskDAO;
+    }
 
     @Override
     public DailyNotificationGroup createDailyNotificationGroup(LocalDateTime dailyDate) {

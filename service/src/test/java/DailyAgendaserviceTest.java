@@ -1,12 +1,11 @@
+import dao.ProjectDAO;
 import dao.TaskDAO;
 import entities.DailyAgenda;
 import entities.Task;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import services.DailyAgendaService;
-import services.DailyAgendaServiceImpl;
-import services.TaskService;
+import services.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -15,7 +14,6 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import static org.mockito.Mockito.*;
-import services.TaskServiceImpl;
 
 /**
  * Created by Iana_Kasimova on 09-Jul-18.
@@ -28,11 +26,13 @@ public class DailyAgendaserviceTest {
     private TaskService taskService;
     private DailyAgendaService agendaService;
     private TaskDAO taskDAO;
+    private ProjectDAO projectDAO;
 
     @Before
     public void init() {
        taskDAO = mock(TaskDAO.class);
-       taskService  = new TaskServiceImpl(taskDAO);
+       projectDAO = mock(ProjectDAO.class);
+       taskService  = new TaskServiceImpl(taskDAO, new ProjectServiceImpl(projectDAO));
        agendaService = new DailyAgendaServiceImpl(taskDAO);
     }
 

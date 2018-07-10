@@ -10,11 +10,9 @@ import entities.Task;
 public class ProjectServiceImpl implements ProjectService {
 
     private ProjectDAO projectDAO;
-    private TaskService taskService;
 
-    public ProjectServiceImpl(ProjectDAO projectDAO, TaskService taskService){
+    public ProjectServiceImpl(ProjectDAO projectDAO){
         this.projectDAO = projectDAO;
-        this.taskService = taskService;
     }
 
     @Override

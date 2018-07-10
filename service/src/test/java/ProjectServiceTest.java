@@ -32,9 +32,9 @@ public class ProjectServiceTest {
     @Before
     public void init(){
         taskDAO = mock(TaskDAO.class);
-        taskService = new TaskServiceImpl(taskDAO);
         projectDAO = mock(ProjectDAO.class);
-        projectService = new ProjectServiceImpl(projectDAO, taskService);
+        taskService = new TaskServiceImpl(taskDAO, new ProjectServiceImpl(projectDAO));
+        projectService = new ProjectServiceImpl(projectDAO);
 
         title = "Rome";
         when(projectDAO.saveProject(new Project(title))).thenReturn(new Project(title));
