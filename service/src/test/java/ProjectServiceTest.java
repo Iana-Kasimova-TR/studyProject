@@ -14,8 +14,6 @@ import services.TaskServiceImpl;
 
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.isA;
-import static org.mockito.Matchers.refEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.*;
@@ -37,8 +35,9 @@ public class ProjectServiceTest {
     public void init(){
         taskDAO = mock(TaskDAO.class);
         projectDAO = mock(ProjectDAO.class);
-        taskService = new TaskServiceImpl(taskDAO, new ProjectServiceImpl(projectDAO));
         projectService = new ProjectServiceImpl(projectDAO);
+        taskService = new TaskServiceImpl(taskDAO, projectService);
+
 
         title = "Rome";
         project = new Project(title);
@@ -56,7 +55,6 @@ public class ProjectServiceTest {
     public void testSaveProject(){
         String description = "Adventures in Rome";
         project.setDescription(description);
-        when(projectDAO.saveProject(project)).thenReturn(project);
         project = projectService.saveProject(project);
         assertThat(project.getDescription()).isEqualTo(description);
     }
@@ -72,7 +70,6 @@ public class ProjectServiceTest {
         Task task = new Task("task");
         project.getTasks().add(task);
         task.setProject(project);
-        when(projectDAO.saveProject(project)).thenReturn(project);
         when(taskDAO.saveTask(task)).thenReturn(task);
         project = projectService.addTaskToProject(project, task);
         task = taskService.saveTask(task);
@@ -86,7 +83,6 @@ public class ProjectServiceTest {
         project.getTasks().add(task);
         task.setProject(project);
 
-        when(projectDAO.saveProject(project)).thenReturn(project);
         when(taskDAO.saveTask(task)).thenReturn(task);
         project = projectService.addTaskToProject(project, task);
         task = taskService.saveTask(task);
@@ -99,6 +95,6 @@ public class ProjectServiceTest {
 
         project = projectService.deleteTaskFromProject(project, task);
         assertThat(project.getTasks().contains(task)).isFalse();
-        assertThat(task.getProject()).isEqualTo(null);
+        assertThat(task.getProject()).isNull();
     }
 }
