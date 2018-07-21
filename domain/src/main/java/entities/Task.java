@@ -23,13 +23,17 @@ public class Task {
     private Priority priority;
     private float percentOfReadiness;
     private Task parentTask;
-    private final TaskId id;
+    private  TaskId id;
     private Project project;
+
+
+    public void setId(TaskId id) {
+        this.id = id;
+    }
 
     public Task(String title) {
 
         this.title = title;
-        this.id = new TaskId();
     }
 
     public String getDescription() {

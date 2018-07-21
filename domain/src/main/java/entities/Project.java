@@ -14,11 +14,14 @@ public class Project {
     private String name;
     private String description;
     private List<Task> tasks = new ArrayList<>();
-    private final ProjectId id;
+    private ProjectId id;
+
+    public void setId(ProjectId id) {
+        this.id = id;
+    }
 
     public Project(String name) {
         this.name = name;
-        this.id = new ProjectId();
     }
 
     public String getName() {
@@ -41,12 +44,16 @@ public class Project {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) { this.tasks = tasks; }
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
 
-    public ProjectId getId() { return id; }
+    public ProjectId getId() {
+        return id;
+    }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
 
         return new HashCodeBuilder(17, 37)
                 .append(name)
@@ -57,10 +64,10 @@ public class Project {
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
 
-        if(o == this) return true;
-        if(!(o instanceof Project)) return false;
+        if (o == this) return true;
+        if (!(o instanceof Project)) return false;
 
         Project project = (Project) o;
 

@@ -18,4 +18,6 @@ public interface DailyAgendaService {
 
     DailyAgenda createDailyAgenda(LocalDateTime dailyDate, List<Project> projects, List<Task> tasks);
 
+    void setTaskDAO(TaskDAO taskDAO);
+
 }

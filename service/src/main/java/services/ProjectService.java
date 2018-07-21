@@ -1,6 +1,7 @@
 package services;
 
 ;
+import dao.ProjectDAO;
 import entities.Project;
 import entities.Task;
 
@@ -19,5 +20,6 @@ public interface ProjectService {
 
     Project deleteTaskFromProject(Project project, Task task);
 
+    void setProjectDAO(ProjectDAO projectDAO);
 
 }

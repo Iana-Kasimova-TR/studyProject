@@ -14,8 +14,15 @@ public interface TaskService {
 
     boolean deleteTask(Task task);
 
-    Task addSubTask(Task parentTask, String title);
+    Task addSubTask(Task parentTask, Task subTask);
 
     Task deleteSubTask(Task parentTask, Task subTask);
+
+    Task doExecute(Task task);
+
+    void setTaskDAO(TaskDAO taskDAO);
+
+    void setProjectService(ProjectService projectService);
+
 
 }

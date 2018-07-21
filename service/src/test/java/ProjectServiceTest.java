@@ -2,24 +2,20 @@ import dao.ProjectDAO;
 import dao.TaskDAO;
 import entities.Project;
 import entities.Task;
+import mockDao.InMemoryProjectDao;
+import mockDao.InMemoryTaskDao;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 import services.ProjectService;
 import services.ProjectServiceImpl;
 import services.TaskService;
 import services.TaskServiceImpl;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by anakasimova on 10/07/2018.
  */
-@RunWith(MockitoJUnitRunner.class)
 public class ProjectServiceTest {
 
     private ProjectDAO projectDAO;
@@ -31,69 +27,53 @@ public class ProjectServiceTest {
 
     @Before
     public void init(){
-        taskDAO = mock(TaskDAO.class);
-        projectDAO = mock(ProjectDAO.class);
-        taskService = new TaskServiceImpl(taskDAO, new ProjectServiceImpl(projectDAO));
-        projectService = new ProjectServiceImpl(projectDAO);
+        taskDAO = new InMemoryTaskDao();
+        projectDAO = new InMemoryProjectDao();
+        taskService = new TaskServiceImpl();
+        projectService = new ProjectServiceImpl();
+        taskService.setTaskDAO(taskDAO);
+        projectService.setProjectDAO(projectDAO);
+        taskService.setProjectService(projectService);
 
         title = "Rome";
-        when(projectDAO.saveProject(new Project(title))).thenReturn(new Project(title));
         project = projectService.createProject(title);
     }
 
 
     @Test
     public void testCreateProject(){
-        assertThat(project).isEqualTo(new Project("Rome"));
+        assertThat(projectDAO.getProject(project.getId())).isEqualTo(project);
     }
 
     @Test
     public void testSaveProject(){
         String description = "Adventures in Rome";
         project.setDescription(description);
-        when(projectDAO.saveProject(project)).thenReturn(project);
-        project = projectService.saveProject(project);
-        assertThat(project.getDescription()).isEqualTo(description);
+        assertThat(projectService.saveProject(project).getDescription()).isEqualTo(project.getDescription());
     }
 
     @Test
     public void testDeleteProject(){
-        when(projectService.deleteProject(project)).thenReturn(true);
         assertThat(projectService.deleteProject(project)).isTrue();
     }
 
     @Test
     public void testAddTaskToProject(){
         Task task = new Task("task");
-        project.getTasks().add(task);
-        task.setProject(project);
-        when(projectDAO.saveProject(project)).thenReturn(project);
-        when(taskDAO.saveTask(task)).thenReturn(task);
-        project = projectService.addTaskToProject(project, task);
-        task = taskService.saveTask(task);
-        assertThat(project.getTasks().contains(task)).isTrue();
-        assertThat(task.getProject()).isEqualTo(project);
+        assertThat(projectService.addTaskToProject(project, task).getTasks().contains(task)).isTrue();
+        assertThat(taskService.saveTask(task).getProject()).isEqualTo(project);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testDeleteTaskFromProject(){
         Task task = new Task("task");
-        project.getTasks().add(task);
-        task.setProject(project);
 
-        when(projectDAO.saveProject(project)).thenReturn(project);
-        when(taskDAO.saveTask(task)).thenReturn(task);
         project = projectService.addTaskToProject(project, task);
         task = taskService.saveTask(task);
 
-        project.getTasks().remove(task);
         task.setProject(null);
 
-        when(projectDAO.saveProject(project)).thenReturn(project);
-        when(taskDAO.saveTask(task)).thenReturn(task);
-
-        project = projectService.deleteTaskFromProject(project, task);
-        assertThat(project.getTasks().contains(task)).isFalse();
-        assertThat(task.getProject()).isEqualTo(null);
+        assertThat(projectService.deleteTaskFromProject(project, task).getTasks().contains(task)).isFalse();
+        assertThat(taskService.saveTask(task).getProject()).isNull();
     }
 }
