@@ -10,8 +10,7 @@ import services.ProjectService;
 import services.ProjectServiceImpl;
 import services.TaskService;
 import services.TaskServiceImpl;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Created by anakasimova on 10/07/2018.
@@ -34,7 +33,6 @@ public class ProjectServiceTest {
         taskService.setTaskDAO(taskDAO);
         projectService.setProjectDAO(projectDAO);
         taskService.setProjectService(projectService);
-
         title = "Rome";
         project = projectService.createProject(title);
     }
@@ -42,6 +40,7 @@ public class ProjectServiceTest {
 
     @Test
     public void testCreateProject(){
+
         assertThat(projectDAO.getProject(project.getId())).isEqualTo(project);
     }
 
@@ -67,12 +66,10 @@ public class ProjectServiceTest {
     @Test(expected = RuntimeException.class)
     public void testDeleteTaskFromProject(){
         Task task = new Task("task");
-
         project = projectService.addTaskToProject(project, task);
         task = taskService.saveTask(task);
 
         task.setProject(null);
-
         assertThat(projectService.deleteTaskFromProject(project, task).getTasks().contains(task)).isFalse();
         assertThat(taskService.saveTask(task).getProject()).isNull();
     }

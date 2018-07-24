@@ -9,14 +9,12 @@ import services.ProjectService;
 import services.ProjectServiceImpl;
 import services.TaskService;
 import services.TaskServiceImpl;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by anakasimova on 10/07/2018.
  */
 public class TaskServiceTest {
-
     private ProjectDAO projectDAO;
     private TaskDAO taskDAO;
     private ProjectService projectService;
@@ -80,6 +78,6 @@ public class TaskServiceTest {
         task = taskService.doExecute(task);
         assertThat(task.isDone()).isTrue();
         assertThat(task.getPercentOfReadiness()).isEqualTo(100);
-    }
 
+    }
 }
