@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by anakasimova on 06/07/2018.
  */
-public interface DailyNotificationGroupService {
+public interface DailyNotificationGroupService{
 
     DailyNotificationGroup createDailyNotificationGroup(LocalDateTime dailyDate);
 

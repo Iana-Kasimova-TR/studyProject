@@ -4,10 +4,12 @@ import dao.TaskDAO;
 import entities.Task;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by anakasimova on 08/07/2018.
  */
+@Named
 public class TaskServiceImpl implements TaskService {
 
     @Inject

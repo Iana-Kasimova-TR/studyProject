@@ -4,7 +4,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +29,10 @@ public class DefinitionAnnotationReader {
         for(String clazz : classes){
             Definition def = new Definition();
             Class<?> claz = Class.forName(clazz);
-            def.setName(clazz);
+            def.setClassName(clazz.substring(clazz.indexOf(".") + 1));
             def.setClazz(claz);
             fillDefenition(def);
-            if (def.getId() != null){
-                definitions.put(def.getId(), def);
-                return;
-            }
-            definitions.put(def.getName(), def);
+            definitions.put(def.getClassName(), def);
         }
 
     }
@@ -46,7 +41,8 @@ public class DefinitionAnnotationReader {
         Class[] interfaces = def.getClazz().getInterfaces();
         if(interfaces.length !=0){
             for(int i = 0; i<interfaces.length; i++){
-                def.getAliases().add(interfaces[i].getName());
+                String nameOfImplInterface = interfaces[i].getName().substring(interfaces[i].getName().indexOf(".") + 1);
+                def.getAliases().add(nameOfImplInterface);
             }
         }
         if(def.getClazz().isAnnotationPresent(Named.class)){
@@ -62,7 +58,7 @@ public class DefinitionAnnotationReader {
                 if(fields[i].isAnnotationPresent(Named.class)){
                     defProp.setReference(fields[i].getAnnotation(Named.class).value());
                 }else{
-                    defProp.setReference(fields[i].getType().getName());
+                    defProp.setType(fields[i].getType().getName());
                 }
                 def.getDefProp().add(defProp);
             }

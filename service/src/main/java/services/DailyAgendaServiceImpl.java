@@ -12,10 +12,12 @@ import java.util.List;
 import org.mockito.InjectMocks;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by anakasimova on 08/07/2018.
  */
+@Named
 public class DailyAgendaServiceImpl implements DailyAgendaService {
 
     @Inject

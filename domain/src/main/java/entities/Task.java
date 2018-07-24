@@ -26,7 +26,6 @@ public class Task {
     private  TaskId id;
     private Project project;
 
-
     public void setId(TaskId id) {
         this.id = id;
     }

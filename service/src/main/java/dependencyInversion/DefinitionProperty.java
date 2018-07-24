@@ -8,6 +8,7 @@ public class DefinitionProperty {
     private String name;
     private String value;
     private String reference;
+    private String type;
 
 
     public String getName() {
@@ -33,4 +34,8 @@ public class DefinitionProperty {
     public void setReference(String reference) {
         this.reference = reference;
     }
+
+    public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
 }

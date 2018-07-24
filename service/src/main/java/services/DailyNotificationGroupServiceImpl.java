@@ -6,6 +6,7 @@ import entities.Project;
 import entities.Task;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * Created by anakasimova on 08/07/2018.
  */
+@Named
 public class DailyNotificationGroupServiceImpl implements DailyNotificationGroupService {
 
     @Inject

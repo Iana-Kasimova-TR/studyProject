@@ -9,14 +9,14 @@ import java.util.List;
 public class Definition {
 
     private String id;
-    private String name;
+    private String className;
     private List<String> aliases = new ArrayList<>();
     private Class<?> clazz;
     private List<DefinitionProperty> defProp = new ArrayList<>();
 
-    public String getName() { return name; }
+    public String getClassName() { return className; }
 
-    public void setName(String name) { this.name = name; }
+    public void setClassName(String className) { this.className = className; }
 
     public String getId() {
         return id;
