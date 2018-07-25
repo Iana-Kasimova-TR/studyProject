@@ -26,12 +26,13 @@ public class AnnotationBeanFactory implements BeanFactory {
 
     @Override
     public Object getBean(String beanName) {
+        Definition neededDefinition = definitions.entrySet().stream().filter( e-> e.getKey().equals(beanName)).map(Map.Entry::getValue).findAny().orElse(null);
+
         if(container.get(beanName) != null){
             return container.get(beanName);
         }
         return blankBeans.get(beanName);
     }
-
 
 
     public AnnotationBeanFactory(Map<String, Definition> sourceDefinitions) {
@@ -50,7 +51,7 @@ public class AnnotationBeanFactory implements BeanFactory {
                     bean = postBeanProcessor.postProcessBeforeInitialization(entryBlankBean.getValue(), entryBlankBean.getKey());
                     bean = postBeanProcessor.postProcessAfterInitialization(bean, entryBlankBean.getKey());
                 }catch(Exception e){
-                    throw new RuntimeException("cannot process postBeanProcessor " + postBeanProcessor.getClass() + "with bean " + entryBlankBean.getKey());
+                    throw new RuntimeException("cannot process postBeanProcessor " + postBeanProcessor.getClass() + " with bean " + entryBlankBean.getKey());
                 }
                 container.put(entryBlankBean.getKey(), bean);
             }
@@ -62,7 +63,8 @@ public class AnnotationBeanFactory implements BeanFactory {
             if(def.getAliases().contains("PostBeanProcessor")){
                 PostBeanProcessor postBeanProcessor;
                 try {
-                    if(def.getClassName().contains(InjectAnnotationPostBeanProcessor.class.getName())){
+                    String injectAnnotationPostBeanProcessorClassName = InjectAnnotationPostBeanProcessor.class.getName().substring(InjectAnnotationPostBeanProcessor.class.getName().indexOf(".") + 1);
+                    if(def.getClassName().contains(injectAnnotationPostBeanProcessorClassName)){
                         InjectAnnotationPostBeanProcessor injectPostBeanProc = (InjectAnnotationPostBeanProcessor) def.getClazz().newInstance();
                         injectPostBeanProc.setBeanFactory(this);
                         postBeanProcessor = injectPostBeanProc;
@@ -82,54 +84,17 @@ public class AnnotationBeanFactory implements BeanFactory {
     public void createBeans(){
         Set<String> beanNames = definitions.keySet();
         for(String beanName: beanNames) {
-            //if (definitions.get(beanName).getClazz().isAnnotationPresent(Named.class)) {
-                if (isInterface(beanName)) {
-                    Object bean = instantiateOfImplementationOfInterface(beanName);
-                    if (bean == null) {
-                        throw new RuntimeException("cannot be found implementation of interface " + beanName);
-                    }
-                    blankBeans.put(beanName, instantiateOfImplementationOfInterface(beanName));
-                    blankBeans.put(bean.getClass().getName(), bean);
-                    beanNames.remove(bean.getClass().getName());
-                } else {
+            if (definitions.get(beanName).getClazz().isAnnotationPresent(Named.class)) {
                     try {
                         blankBeans.put(beanName, definitions.get(beanName).getClazz().newInstance());
                     } catch (Exception e) {
                         throw new RuntimeException("cannot instantiated a class! " + beanName);
                     }
-                }
             }
-      //  }
+        }
     }
 
 
 
-    private boolean isInterface(String name){
-        boolean isInterface = false;
-        try{
-            definitions.get(name).getClazz().newInstance();
-        }catch (InstantiationException e){
-            isInterface = true;
-        }catch (Exception e){
-            throw  new RuntimeException("cannot instantiated a class! " + name);
-        }
-        return isInterface;
-    }
 
-    private Object instantiateOfImplementationOfInterface(String name){
-        Object bean = null;
-            for(Definition def: definitions.values()){
-
-                if(def.getAliases().contains(name)){
-                    try{
-                         bean = def.getClazz().newInstance();
-                         return bean;
-                    }catch (Exception e){
-                        throw  new RuntimeException("cannot instantiated a implementation of inteface! " + name);
-                    }
-
-                }
-        }
-         return bean;
-}
 }

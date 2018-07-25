@@ -55,7 +55,7 @@ public class DefinitionAnnotationReader {
             if(fields[i].isAnnotationPresent(Inject.class)){
                 DefinitionProperty defProp = new DefinitionProperty();
                 defProp.setName(fields[i].getName());
-                if(fields[i].isAnnotationPresent(Named.class)){
+                if(fields[i].isAnnotationPresent(Named.class) && fields[i].getAnnotation(Named.class).value() != null){
                     defProp.setReference(fields[i].getAnnotation(Named.class).value());
                 }else{
                     defProp.setType(fields[i].getType().getName());

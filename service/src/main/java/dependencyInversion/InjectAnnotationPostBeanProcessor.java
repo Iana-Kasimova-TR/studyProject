@@ -23,16 +23,22 @@ public class InjectAnnotationPostBeanProcessor implements PostBeanProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws Exception {
        Definition beanDef = beanFactory.getDefinitions().get(beanName);
+       Definition defOfInjectionBean;
+
         for(DefinitionProperty defProp : beanDef.getDefProp()){
             if(defProp.getReference() != null) {
-                Definition defOfInjectionBean = beanFactory.getDefinitions().values().stream().filter(def -> def.getId().equals(defProp.getReference())).findAny().orElse(null);
-                setTheProperty(defProp.getName(), bean, beanFactory.getBean(defOfInjectionBean.getClassName()));
+                defOfInjectionBean = beanFactory.getDefinitions().values().stream().filter(def -> def.getId().equals(defProp.getReference())).findAny().orElse(null);
+            }else{
+                String typeOfIngectionBean = defProp.getType().substring(defProp.getType().indexOf(".") + 1);
+                defOfInjectionBean = beanFactory.getDefinitions().values().stream().filter(def -> def.getAliases().contains(typeOfIngectionBean)).findAny().orElse(null);
+
             }
-            setTheProperty(defProp.getName(), bean, beanFactory.getBean(defProp.getType()));
+            setTheProperty(defProp.getName(), bean, beanFactory.getBean(defOfInjectionBean.getClassName()));
         }
 
         return bean;
     }
+
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws Exception {

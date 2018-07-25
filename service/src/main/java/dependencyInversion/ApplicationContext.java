@@ -12,7 +12,7 @@ public class ApplicationContext {
         reader.read();
         System.out.println(reader.getDefinitions());
         BeanFactory factory = new AnnotationBeanFactory(reader.definitions);
-        System.out.println((TaskService)factory.getBean("TaskService"));
+        System.out.println((TaskService)factory.getBean("TaskServiceImpl"));
         //System.out.println(((services.TaskService) factory.getBlankBeans().get("services.TaskServiceImpl")).deleteTask(new Task("ih")));
 
     }
