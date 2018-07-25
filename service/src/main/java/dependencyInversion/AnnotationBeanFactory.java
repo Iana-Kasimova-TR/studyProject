@@ -1,8 +1,6 @@
 package dependencyInversion;
 
-import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +14,7 @@ public class AnnotationBeanFactory implements BeanFactory {
 
     private Map<String, Object> blankBeans = new HashMap<>();
 
-    private Map<String, PostBeanProcessor> postBeanProcessors = new HashMap<>();
+    private Map<String, BeanPostProcessor> postBeanProcessors = new HashMap<>();
 
     private Map<String, Definition> definitions = new HashMap<>();
 
@@ -38,7 +36,7 @@ public class AnnotationBeanFactory implements BeanFactory {
     public AnnotationBeanFactory(Map<String, Definition> sourceDefinitions) {
         this.definitions = sourceDefinitions;
         createBeans();
-        createPostBeanProccessors();
+        createBeanPostProccessors();
         beanProcessing();
     }
 
@@ -46,32 +44,32 @@ public class AnnotationBeanFactory implements BeanFactory {
     private void beanProcessing(){
         for(Map.Entry<String, Object> entryBlankBean: blankBeans.entrySet()){
             Object bean;
-            for(PostBeanProcessor postBeanProcessor: postBeanProcessors.values()){
+            for(BeanPostProcessor beanPostProcessor : postBeanProcessors.values()){
                 try {
-                    bean = postBeanProcessor.postProcessBeforeInitialization(entryBlankBean.getValue(), entryBlankBean.getKey());
-                    bean = postBeanProcessor.postProcessAfterInitialization(bean, entryBlankBean.getKey());
+                    bean = beanPostProcessor.postProcessBeforeInitialization(entryBlankBean.getValue(), entryBlankBean.getKey());
+                    bean = beanPostProcessor.postProcessAfterInitialization(bean, entryBlankBean.getKey());
                 }catch(Exception e){
-                    throw new RuntimeException("cannot process postBeanProcessor " + postBeanProcessor.getClass() + " with bean " + entryBlankBean.getKey());
+                    throw new RuntimeException("cannot process beanPostProcessor " + beanPostProcessor.getClass() + " with bean " + entryBlankBean.getKey());
                 }
                 container.put(entryBlankBean.getKey(), bean);
             }
         }
     }
 
-    private void createPostBeanProccessors() {
+    private void createBeanPostProccessors() {
         for(Definition def : definitions.values()){
-            if(def.getAliases().contains("PostBeanProcessor")){
-                PostBeanProcessor postBeanProcessor;
+            if(def.getAliases().contains("BeanPostProcessor")){
+                BeanPostProcessor beanPostProcessor;
                 try {
-                    String injectAnnotationPostBeanProcessorClassName = InjectAnnotationPostBeanProcessor.class.getName().substring(InjectAnnotationPostBeanProcessor.class.getName().indexOf(".") + 1);
+                    String injectAnnotationPostBeanProcessorClassName = InjectAnnotationBeanPostProcessor.class.getName().substring(InjectAnnotationBeanPostProcessor.class.getName().indexOf(".") + 1);
                     if(def.getClassName().contains(injectAnnotationPostBeanProcessorClassName)){
-                        InjectAnnotationPostBeanProcessor injectPostBeanProc = (InjectAnnotationPostBeanProcessor) def.getClazz().newInstance();
+                        InjectAnnotationBeanPostProcessor injectPostBeanProc = (InjectAnnotationBeanPostProcessor) def.getClazz().newInstance();
                         injectPostBeanProc.setBeanFactory(this);
-                        postBeanProcessor = injectPostBeanProc;
+                        beanPostProcessor = injectPostBeanProc;
                     }else{
-                        postBeanProcessor = (PostBeanProcessor) def.getClazz().newInstance();
+                        beanPostProcessor = (BeanPostProcessor) def.getClazz().newInstance();
                     }
-                 postBeanProcessors.put(def.getClassName(), postBeanProcessor);
+                 postBeanProcessors.put(def.getClassName(), beanPostProcessor);
                 } catch (InstantiationException e) {
                     throw new RuntimeException( "Cannot instantiate a " + def.getClassName());
                 } catch (IllegalAccessException e) {

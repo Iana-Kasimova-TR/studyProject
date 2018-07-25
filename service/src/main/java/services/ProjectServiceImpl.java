@@ -3,6 +3,7 @@ package services;
 import dao.ProjectDAO;
 import entities.Project;
 import entities.Task;
+import validation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,8 +23,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project createProject(String title) {
-      if(title == null || title.trim().isEmpty()){
+    public Project createProject(@NonNull String title) {
+      if(title.trim().isEmpty()){
           throw new RuntimeException("you cannot create project without title!");
       }
       Project project = new Project(title);
@@ -31,42 +32,24 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project saveProject(Project project) {
-        if(project == null || !(project instanceof Project)){
-            throw new RuntimeException("you cannot save something, which is not a project!");
-        }
+    public Project saveProject(@NonNull Project project) {
         return projectDAO.saveProject(project);
     }
 
     @Override
-    public boolean deleteProject(Project project) {
-        if(project == null || !(project instanceof Project)){
-            throw new RuntimeException("you cannot delete something, which is not a project!");
-        }
+    public boolean deleteProject( @NonNull Project project) {
         return projectDAO.deleteProject(project);
     }
 
     @Override
-    public Project addTaskToProject(Project project, Task task) {
-        if(project == null || !(project instanceof Project)
-                || task == null || !(task instanceof Task)){
-            throw new RuntimeException("you can add only task in project!");
-        }
+    public Project addTaskToProject(@NonNull Project project, @NonNull Task task) {
         project.getTasks().add(task);
         task.setProject(project);
         return projectDAO.saveProject(project);
     }
 
     @Override
-    public Project deleteTaskFromProject(Project project, Task task) throws RuntimeException{
-        if(project == null
-                || !(project instanceof Project)
-                || task == null
-                || !(task instanceof Task)
-                || !project.getTasks().contains(task)
-                || task.getProject() != project){
-            throw new RuntimeException("you can delete only task in project and only if project contains this task!");
-        }
+    public Project deleteTaskFromProject(@NonNull Project project, @NonNull Task task) throws RuntimeException{
         project.getTasks().remove(task);
         task.setProject(null);
         return projectDAO.saveProject(project);

@@ -2,6 +2,7 @@ package services;
 
 import dao.TaskDAO;
 import entities.Task;
+import validation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,8 +30,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask(String title) {
-        if(title == null || title.trim().isEmpty()){
+    public Task createTask(@NonNull String title) {
+        if(title.trim().isEmpty()){
             throw new RuntimeException("you cannot create task without title!");
         }
         Task task = new Task(title);
@@ -39,19 +40,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task saveTask(Task task) {
-        if(task == null || !(task instanceof Task)){
-            throw new RuntimeException("you cannot save something, which is not task!");
-        }
         return taskDAO.saveTask(task);
     }
 
     @Override
-    public boolean deleteTask(Task task) {
-        if(task == null || !(task instanceof Task)){
-            throw new RuntimeException("you cannot delete something, which is not task!");
-        }
-
-
+    public boolean deleteTask(@NonNull Task task) {
         if(task.getParentTask() != null){
             this.deleteSubTask(task.getParentTask(), task);
         }
@@ -62,14 +55,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task addSubTask(Task parentTask, Task subTask) {
-        if(parentTask == null
-                || subTask ==null
-                || !(parentTask instanceof Task)
-                || !(subTask instanceof Task)){
-            throw new RuntimeException("you can add task only in another task!");
-        }
-
+    public Task addSubTask(@NonNull Task parentTask, @NonNull Task subTask) {
         parentTask.getSubTasks().add(subTask);
         subTask.setParentTask(parentTask);
         if(parentTask.getProject() != null){
@@ -81,16 +67,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task deleteSubTask(Task parentTask, Task subTask) {
-        if(parentTask == null
-                || subTask ==null
-                || !(parentTask instanceof Task)
-                || !(subTask instanceof Task)
-                ||!parentTask.getSubTasks().contains(subTask)
-                || subTask.getParentTask() != parentTask){
-            throw new RuntimeException("you can delete sub task only if parent task contains this sub task!");
-        }
-
+    public Task deleteSubTask(@NonNull Task parentTask, @NonNull Task subTask) {
         parentTask.getSubTasks().remove(subTask);
         subTask.setParentTask(null);
         if(parentTask.getProject() != null){
@@ -102,11 +79,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task doExecute(Task task) {
-        if(task == null || !(task instanceof Task)){
-            throw new RuntimeException("you can execute only task!");
-        }
-
+    public Task doExecute(@NonNull Task task) {
         task.setDone(true);
         task.setPercentOfReadiness(100);
         taskDAO.saveTask(task);

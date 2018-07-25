@@ -1,5 +1,6 @@
 package dependencyInversion;
 
+import entities.Project;
 import entities.Task;
 import services.TaskService;
 
@@ -12,8 +13,8 @@ public class ApplicationContext {
         reader.read();
         System.out.println(reader.getDefinitions());
         BeanFactory factory = new AnnotationBeanFactory(reader.definitions);
-        System.out.println((TaskService)factory.getBean("TaskServiceImpl"));
-        //System.out.println(((services.TaskService) factory.getBlankBeans().get("services.TaskServiceImpl")).deleteTask(new Task("ih")));
-
+        TaskService taskService = (TaskService)factory.getBean("TaskServiceImpl");
+        System.out.println(taskService);
+        taskService.saveTask(null);
     }
 }

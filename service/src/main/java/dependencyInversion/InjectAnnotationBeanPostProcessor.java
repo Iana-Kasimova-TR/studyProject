@@ -1,17 +1,11 @@
 package dependencyInversion;
 
-import javax.inject.Inject;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 import java.beans.Statement;
 
 /**
  * Created by anakasimova on 23/07/2018.
  */
-public class InjectAnnotationPostBeanProcessor implements PostBeanProcessor {
+public class InjectAnnotationBeanPostProcessor implements BeanPostProcessor {
 
 
     private BeanFactory beanFactory;

@@ -2,6 +2,7 @@ package services;
 
 import dao.TaskDAO;
 import entities.Task;
+import validation.NonNull;
 
 /**
  * Created by anakasimova on 06/07/2018.
@@ -10,7 +11,7 @@ public interface TaskService {
 
     Task createTask(String title);
 
-    Task saveTask(Task task);
+    Task saveTask(@NonNull Task task);
 
     boolean deleteTask(Task task);
 

@@ -4,6 +4,7 @@ import dao.TaskDAO;
 import entities.DailyNotificationGroup;
 import entities.Project;
 import entities.Task;
+import validation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,23 +26,14 @@ public class DailyNotificationGroupServiceImpl implements DailyNotificationGroup
     }
 
     @Override
-    public DailyNotificationGroup createDailyNotificationGroup(LocalDateTime dailyDate) {
-        if(dailyDate == null || !(dailyDate instanceof LocalDateTime)){
-            throw new RuntimeException("not legal arguments for creating daily agenda!");
-        }
+    public DailyNotificationGroup createDailyNotificationGroup( @NonNull LocalDateTime dailyDate) {
         List<Task> tasks = taskDAO.getTasksByRemindDate(dailyDate);
         DailyNotificationGroup dailyNotificationGroup = new DailyNotificationGroup(dailyDate, tasks);
         return dailyNotificationGroup;
     }
 
     @Override
-    public DailyNotificationGroup createDailyNotifiactionGroup(LocalDateTime dateTime, List<Project> projects, List<Task> tasks) {
-        if(dateTime == null
-                || !(dateTime instanceof LocalDateTime)
-                || projects == null
-                || tasks == null){
-            throw new RuntimeException("not legal arguments for creating daily agenda!");
-        }
+    public DailyNotificationGroup createDailyNotifiactionGroup(@NonNull LocalDateTime dateTime, @NonNull List<Project> projects, @NonNull List<Task> tasks) {
         List<Task> allTasks = taskDAO.getTasksByRemindDate(dateTime);
         List<Task> neededTasks = new ArrayList<>();
         for(Project project: projects){
