@@ -24,12 +24,31 @@ public class AnnotationBeanFactory implements BeanFactory {
 
     @Override
     public Object getBean(String beanName) {
-        Definition neededDefinition = definitions.entrySet().stream().filter( e-> e.getKey().equals(beanName)).map(Map.Entry::getValue).findAny().orElse(null);
-
-        if(container.get(beanName) != null){
-            return container.get(beanName);
+        if(definitions.values().stream().filter(def -> def.getId() != null).filter(def -> def.getId().equals(beanName)).findAny().orElse(null) != null){
+           return getBeanById(beanName);
         }
-        return blankBeans.get(beanName);
+        else if(definitions.values().stream().filter(def -> def.getAliases().contains(beanName)).findAny().orElse(null) != null) {
+            return getBeanByInterfaceName(beanName);
+        }
+
+        return getBeanByClassName(beanName);
+    }
+
+    private Object getBeanById(String id){
+        String classNameOfNeededBean = definitions.values().stream().filter(def -> def.getId() != null).filter(def -> def.getId().equals(id)).findAny().orElse(null).getClassName();
+        return getBeanByClassName(classNameOfNeededBean);
+    }
+
+    private Object getBeanByClassName(String name){
+        if(container.get(name) != null){
+            return container.get(name);
+        }
+        return blankBeans.get(name);
+    }
+
+    private Object getBeanByInterfaceName(String name){
+        String classNameOfNeededBean = definitions.values().stream().filter(def -> def.getAliases().contains(name)).findAny().orElse(null).getClassName();
+        return getBeanByClassName(classNameOfNeededBean);
     }
 
 

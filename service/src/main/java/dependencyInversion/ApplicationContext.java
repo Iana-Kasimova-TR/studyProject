@@ -1,5 +1,6 @@
 package dependencyInversion;
 
+import dao.TaskDAO;
 import entities.Project;
 import entities.Task;
 import services.TaskService;
@@ -13,8 +14,8 @@ public class ApplicationContext {
         reader.read();
         System.out.println(reader.getDefinitions());
         BeanFactory factory = new AnnotationBeanFactory(reader.definitions);
-        TaskService taskService = (TaskService)factory.getBean("TaskServiceImpl");
-        System.out.println(taskService);
-        taskService.saveTask(null);
+        TaskDAO taskDAO = (TaskDAO)factory.getBean("taskDAO");
+        System.out.println(taskDAO);
+        taskDAO.saveTask(null);
     }
 }
