@@ -9,21 +9,21 @@ import validation.NonNull;
  */
 public interface TaskService {
 
-    Task createTask(String title);
+    Task createTask(@NonNull String title);
 
     Task saveTask(@NonNull Task task);
 
-    boolean deleteTask(Task task);
+    boolean deleteTask(@NonNull Task task);
 
-    Task addSubTask(Task parentTask, Task subTask);
+    Task addSubTask(@NonNull Task parentTask, @NonNull Task subTask);
 
-    Task deleteSubTask(Task parentTask, Task subTask);
+    Task deleteSubTask(@NonNull Task parentTask, @NonNull Task subTask);
 
-    Task doExecute(Task task);
+    Task doExecute(@NonNull Task task);
 
-    void setTaskDAO(TaskDAO taskDAO);
+    void setTaskDAO(@NonNull TaskDAO taskDAO);
 
-    void setProjectService(ProjectService projectService);
+    void setProjectService(@NonNull ProjectService projectService);
 
 
 }

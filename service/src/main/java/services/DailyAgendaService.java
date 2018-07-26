@@ -4,6 +4,7 @@ import dao.TaskDAO;
 import entities.DailyAgenda;
 import entities.Project;
 import entities.Task;
+import validation.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -14,10 +15,10 @@ import java.util.List;
  */
 public interface DailyAgendaService {
 
-    DailyAgenda createDailyAgenda(LocalDateTime dailyDate);
+    DailyAgenda createDailyAgenda(@NonNull LocalDateTime dailyDate);
 
-    DailyAgenda createDailyAgenda(LocalDateTime dailyDate, List<Project> projects, List<Task> tasks);
+    DailyAgenda createDailyAgenda(@NonNull LocalDateTime dailyDate, @NonNull List<Project> projects, @NonNull List<Task> tasks);
 
-    void setTaskDAO(TaskDAO taskDAO);
+    void setTaskDAO(@NonNull TaskDAO taskDAO);
 
 }

@@ -30,7 +30,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask(@NonNull String title) {
+    public Task createTask(String title) {
         if(title.trim().isEmpty()){
             throw new RuntimeException("you cannot create task without title!");
         }
@@ -44,7 +44,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean deleteTask(@NonNull Task task) {
+    public boolean deleteTask(Task task) {
         if(task.getParentTask() != null){
             this.deleteSubTask(task.getParentTask(), task);
         }
@@ -55,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task addSubTask(@NonNull Task parentTask, @NonNull Task subTask) {
+    public Task addSubTask(Task parentTask, Task subTask) {
         parentTask.getSubTasks().add(subTask);
         subTask.setParentTask(parentTask);
         if(parentTask.getProject() != null){
@@ -67,7 +67,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task deleteSubTask(@NonNull Task parentTask, @NonNull Task subTask) {
+    public Task deleteSubTask(Task parentTask, Task subTask) {
         parentTask.getSubTasks().remove(subTask);
         subTask.setParentTask(null);
         if(parentTask.getProject() != null){
@@ -79,7 +79,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task doExecute(@NonNull Task task) {
+    public Task doExecute(Task task) {
         task.setDone(true);
         task.setPercentOfReadiness(100);
         taskDAO.saveTask(task);

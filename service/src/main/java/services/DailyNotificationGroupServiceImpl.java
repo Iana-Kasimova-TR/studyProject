@@ -26,14 +26,14 @@ public class DailyNotificationGroupServiceImpl implements DailyNotificationGroup
     }
 
     @Override
-    public DailyNotificationGroup createDailyNotificationGroup( @NonNull LocalDateTime dailyDate) {
+    public DailyNotificationGroup createDailyNotificationGroup(LocalDateTime dailyDate) {
         List<Task> tasks = taskDAO.getTasksByRemindDate(dailyDate);
         DailyNotificationGroup dailyNotificationGroup = new DailyNotificationGroup(dailyDate, tasks);
         return dailyNotificationGroup;
     }
 
     @Override
-    public DailyNotificationGroup createDailyNotifiactionGroup(@NonNull LocalDateTime dateTime, @NonNull List<Project> projects, @NonNull List<Task> tasks) {
+    public DailyNotificationGroup createDailyNotifiactionGroup(LocalDateTime dateTime, List<Project> projects, List<Task> tasks) {
         List<Task> allTasks = taskDAO.getTasksByRemindDate(dateTime);
         List<Task> neededTasks = new ArrayList<>();
         for(Project project: projects){

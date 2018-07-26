@@ -23,7 +23,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project createProject(@NonNull String title) {
+    public Project createProject(String title) {
       if(title.trim().isEmpty()){
           throw new RuntimeException("you cannot create project without title!");
       }
@@ -32,24 +32,24 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project saveProject(@NonNull Project project) {
+    public Project saveProject(Project project) {
         return projectDAO.saveProject(project);
     }
 
     @Override
-    public boolean deleteProject( @NonNull Project project) {
+    public boolean deleteProject(Project project) {
         return projectDAO.deleteProject(project);
     }
 
     @Override
-    public Project addTaskToProject(@NonNull Project project, @NonNull Task task) {
+    public Project addTaskToProject(Project project, Task task) {
         project.getTasks().add(task);
         task.setProject(project);
         return projectDAO.saveProject(project);
     }
 
     @Override
-    public Project deleteTaskFromProject(@NonNull Project project, @NonNull Task task) throws RuntimeException{
+    public Project deleteTaskFromProject(Project project, Task task) throws RuntimeException{
         project.getTasks().remove(task);
         task.setProject(null);
         return projectDAO.saveProject(project);

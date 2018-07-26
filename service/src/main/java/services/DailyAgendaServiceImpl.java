@@ -22,6 +22,7 @@ import javax.inject.Named;
 public class DailyAgendaServiceImpl implements DailyAgendaService {
 
     @Inject
+    @Named("taskDAO")
     private TaskDAO taskDAO;
 
 
@@ -30,14 +31,14 @@ public class DailyAgendaServiceImpl implements DailyAgendaService {
     }
 
     @Override
-    public DailyAgenda createDailyAgenda(@NonNull LocalDateTime dailyDate) {
+    public DailyAgenda createDailyAgenda(LocalDateTime dailyDate) {
         List<Task> tasks = taskDAO.getTasksByFinishDate(dailyDate);
         DailyAgenda dailyAgenda = new DailyAgenda(dailyDate, tasks);
         return dailyAgenda;
     }
 
     @Override
-    public DailyAgenda createDailyAgenda(@NonNull LocalDateTime dailyDate, @NonNull List<Project> projects, @NonNull List<Task> tasks) {
+    public DailyAgenda createDailyAgenda(LocalDateTime dailyDate, List<Project> projects, List<Task> tasks) {
         List<Task> neededTasks = taskDAO.getTasksByFinishDate(dailyDate);
         List<Task> allTasks = new ArrayList<>();
         for (Project project : projects) {

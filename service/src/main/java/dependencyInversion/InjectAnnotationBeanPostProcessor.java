@@ -21,7 +21,7 @@ public class InjectAnnotationBeanPostProcessor implements BeanPostProcessor {
 
         for(DefinitionProperty defProp : beanDef.getDefProp()){
             if(defProp.getReference() != null) {
-                defOfInjectionBean = beanFactory.getDefinitions().values().stream().filter(def -> def.getId().equals(defProp.getReference())).findAny().orElse(null);
+                defOfInjectionBean = beanFactory.getDefinitions().values().stream().filter(def -> def.getId() != null).filter(def -> def.getId().equals(defProp.getReference())).findAny().orElse(null);
             }else{
                 String typeOfIngectionBean = defProp.getType().substring(defProp.getType().indexOf(".") + 1);
                 defOfInjectionBean = beanFactory.getDefinitions().values().stream().filter(def -> def.getAliases().contains(typeOfIngectionBean)).findAny().orElse(null);

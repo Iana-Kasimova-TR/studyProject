@@ -4,22 +4,23 @@ package services;
 import dao.ProjectDAO;
 import entities.Project;
 import entities.Task;
+import validation.NonNull;
 
 /**
  * Created by anakasimova on 06/07/2018.
  */
 public interface ProjectService {
 
-    Project createProject(String title);
+    Project createProject(@NonNull String title);
 
-    Project saveProject(Project project);
+    Project saveProject(@NonNull Project project);
 
-    boolean deleteProject(Project project);
+    boolean deleteProject(@NonNull Project project);
 
-    Project addTaskToProject(Project project, Task task);
+    Project addTaskToProject(@NonNull Project project, Task task);
 
-    Project deleteTaskFromProject(Project project, Task task);
+    Project deleteTaskFromProject(@NonNull Project project, @NonNull Task task);
 
-    void setProjectDAO(ProjectDAO projectDAO);
+    void setProjectDAO(@NonNull ProjectDAO projectDAO);
 
 }

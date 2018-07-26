@@ -3,6 +3,7 @@ package services;
 import entities.DailyNotificationGroup;
 import entities.Project;
 import entities.Task;
+import validation.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface DailyNotificationGroupService{
 
-    DailyNotificationGroup createDailyNotificationGroup(LocalDateTime dailyDate);
+    DailyNotificationGroup createDailyNotificationGroup(@NonNull LocalDateTime dailyDate);
 
-    DailyNotificationGroup createDailyNotifiactionGroup(LocalDateTime dateTime, List<Project> projects, List<Task> tasks);
+    DailyNotificationGroup createDailyNotifiactionGroup(@NonNull LocalDateTime dateTime, @NonNull List<Project> projects, @NonNull List<Task> tasks);
 }
