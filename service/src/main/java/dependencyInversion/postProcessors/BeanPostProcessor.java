@@ -1,4 +1,4 @@
-package dependencyInversion;
+package dependencyInversion.postProcessors;
 
 /**
  * Created by anakasimova on 23/07/2018.

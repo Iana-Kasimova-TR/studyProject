@@ -21,6 +21,4 @@ public interface ProjectService {
 
     Project deleteTaskFromProject(@NonNull Project project, @NonNull Task task);
 
-    void setProjectDAO(@NonNull ProjectDAO projectDAO);
-
 }

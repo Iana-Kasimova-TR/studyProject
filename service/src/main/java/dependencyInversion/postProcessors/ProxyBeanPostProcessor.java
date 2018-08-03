@@ -1,7 +1,5 @@
-package dependencyInversion;
+package dependencyInversion.postProcessors;
 
-import entities.Project;
-import entities.Task;
 import validation.NonNull;
 
 import java.lang.reflect.InvocationHandler;

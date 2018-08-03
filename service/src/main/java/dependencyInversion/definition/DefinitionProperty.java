@@ -1,4 +1,4 @@
-package dependencyInversion;
+package dependencyInversion.definition;
 
 /**
  * Created by anakasimova on 17/07/2018.

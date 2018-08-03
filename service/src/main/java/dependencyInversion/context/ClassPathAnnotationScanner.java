@@ -1,4 +1,4 @@
-package dependencyInversion;
+package dependencyInversion.context;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by anakasimova on 13/07/2018.
  */
-public class ClassPathAnnotationScanner {
+public class ClassPathAnnotationScanner implements Scanner{
 
     private List<String> classes = new ArrayList<>();
 
@@ -20,8 +20,8 @@ public class ClassPathAnnotationScanner {
         return classes;
     }
 
-
-    public final void scanFrom(ClassLoader classloader) throws IOException {
+    @Override
+    public void scanFrom(ClassLoader classloader) throws IOException {
         for (Map.Entry<File, ClassLoader> entry : getClasspathEntries(classloader).entrySet()) {
             if(entry.getKey().isDirectory()) {
                 scan(entry.getKey(), entry.getValue(), "");

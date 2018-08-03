@@ -21,9 +21,5 @@ public interface TaskService {
 
     Task doExecute(@NonNull Task task);
 
-    void setTaskDAO(@NonNull TaskDAO taskDAO);
-
-    void setProjectService(@NonNull ProjectService projectService);
-
 
 }
