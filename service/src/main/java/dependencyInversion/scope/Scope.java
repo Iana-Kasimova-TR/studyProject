@@ -12,4 +12,6 @@ public interface Scope {
     void addInstance(String nameOfInstance, Object instance);
 
     Object getInstance(String id);
+
+    void removeInstance(String name);
 }

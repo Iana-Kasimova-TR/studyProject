@@ -19,6 +19,7 @@ public class AnnotationApplicationContext implements ApplicationContext {
     public AnnotationApplicationContext(BeanDefinitionSource source) {
         read(source);
         this.beanFactory = new AnnotationBeanFactory(this, this);
+        configure();
     }
 
     @Override

@@ -19,12 +19,10 @@ public class TaskServiceImpl implements TaskService {
     @Inject
     private ProjectService projectService;
 
-    @Override
     public void setTaskDAO(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }
 
-    @Override
     public void setProjectService(ProjectService projectService) {
         this.projectService = projectService;
     }

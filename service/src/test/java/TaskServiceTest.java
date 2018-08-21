@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by anakasimova on 10/07/2018.
  */
 public class TaskServiceTest {
-    private ProjectDAO projectDAO;
+  /*  private ProjectDAO projectDAO;
     private TaskDAO taskDAO;
     private ProjectService projectService;
     private TaskService taskService;
@@ -79,5 +79,5 @@ public class TaskServiceTest {
         assertThat(task.isDone()).isTrue();
         assertThat(task.getPercentOfReadiness()).isEqualTo(100);
 
-    }
+    }*/
 }

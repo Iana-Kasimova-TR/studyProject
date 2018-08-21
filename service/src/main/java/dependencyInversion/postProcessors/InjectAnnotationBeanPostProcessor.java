@@ -50,7 +50,7 @@ public class InjectAnnotationBeanPostProcessor implements BeanPostProcessor, App
     }
 
     private void setTheProperty(String propName, Object bean, Object injectionBean){
-        Statement statement = new Statement(bean, "set"+propName.substring(0, 1).toUpperCase() + propName.substring(1), new Object[]{injectionBean});
+        Statement statement = new Statement(bean, "set" + propName.substring(0, 1).toUpperCase() + propName.substring(1), new Object[]{injectionBean});
         try {
             statement.execute();
         } catch (Exception e) {

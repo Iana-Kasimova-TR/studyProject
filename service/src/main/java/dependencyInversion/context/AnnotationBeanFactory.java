@@ -67,17 +67,15 @@ public class AnnotationBeanFactory implements BeanFactory {
         try {
             // run bean post processors
             for (BeanPostProcessor postProcessor : postProcessors) {
-                instance = postProcessor.postProcessBeforeInitialization(instance, definition.getId());
+                postProcessor.postProcessBeforeInitialization(instance, definition.getId());
             }
             for (BeanPostProcessor postProcessor : postProcessors) {
-                instance = postProcessor.postProcessAfterInitialization(instance, definition.getId());
+                postProcessor.postProcessAfterInitialization(instance, definition.getId());
             }
         }catch (Exception e){
             throw new RuntimeException(e);
         }
 
-        // add changed bean to scope's cache
-        addBeanToScope(definition, instance);
 
         return instance;
     }

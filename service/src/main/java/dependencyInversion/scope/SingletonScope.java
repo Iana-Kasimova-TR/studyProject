@@ -12,21 +12,26 @@ public class SingletonScope implements Scope {
 
     @Override
     public String getScopeName() {
-        return null;
+        return "singleton";
     }
 
     @Override
     public boolean hasInstance(String id) {
-        return false;
+        return instances.containsKey(id);
     }
 
     @Override
-    public void addInstance(String nameOfInstance, Object instance) {
-
+    public void addInstance(String id, Object instance) {
+        instances.put(id, instance);
     }
 
     @Override
     public Object getInstance(String id) {
-        return null;
+        return instances.get(id);
+    }
+
+    @Override
+    public void removeInstance(String id) {
+        instances.remove(id);
     }
 }

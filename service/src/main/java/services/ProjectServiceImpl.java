@@ -17,7 +17,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Inject
     private ProjectDAO projectDAO;
 
-    @Override
     public void setProjectDAO(ProjectDAO projectDAO) {
         this.projectDAO = projectDAO;
     }
