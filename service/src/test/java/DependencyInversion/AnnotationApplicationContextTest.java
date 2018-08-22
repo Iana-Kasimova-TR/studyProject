@@ -20,4 +20,16 @@ public class AnnotationApplicationContextTest {
         final NamedBean namedBean = applicationContext.getBean("bean", NamedBean.class);
         Assert.assertNotNull(namedBean);
     }
+
+    @Test
+    public void createdBeanWithInjection(){
+        final BeanWithInjection beanWithInjection = applicationContext.getBean("BeanWithInjection", BeanWithInjection.class);
+        Assert.assertNotNull(beanWithInjection.getInjectableBean());
+    }
+
+    @Test
+    public void createImplementationOfInterface(){
+        final SomeInterface implInterface = (SomeInterface)applicationContext.getBean("SomeInterface");
+        Assert.assertNotNull(implInterface);
+    }
 }
