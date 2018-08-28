@@ -8,6 +8,7 @@ import dependencyInversion.utils.StringUtils;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,8 @@ public class ClassPathAnnotationBeanDefinitionSource implements BeanDefinitionSo
         }
     }
 
-    private Definition readDefinition(Class<?> claz){
+    private Collection<Definition> readDefinition(Class<?> claz){
+        List<Definition> defs = new ArrayList<>();
         Definition def = new Definition();
         def.setId(getBeanId(claz));
         def.setNames(getBeanNames(claz));
@@ -54,7 +56,20 @@ public class ClassPathAnnotationBeanDefinitionSource implements BeanDefinitionSo
         def.setInterfaces(getBeanInterfaces(claz));
         def.setScope(getBeanScope(claz));
         def.setOrder(getBeanOrder(claz));
-        return def;
+        defs.add(def);
+        List<Definition> innerDefinitions = new ArrayList<>();
+        if(claz.isAnnotationPresent(Configuration.class)){
+            List<Method> innerDefs =  Arrays.stream(claz.getDeclaredMethods())
+                    .filter(method -> method.isAnnotationPresent(Bean.class)).collect(Collectors.toList());
+            for (Method method: innerDefs) {
+                Definition innerDef = new Definition();
+                innerDef.setFactoryBean(method.getReturnType().toString());
+                innerDef.setFactoryMethod(method.getName());
+            }
+        }
+        defs.addAll(innerDefinitions);
+
+        return defs;
     }
 
 

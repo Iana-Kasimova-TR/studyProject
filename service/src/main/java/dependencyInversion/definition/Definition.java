@@ -18,6 +18,24 @@ public class Definition {
     private Collection<String> interfaces;
     private String scope;
     private int order = Ordered.DEFAULT_ORDER;
+    private String factoryBean;
+    private String factoryMethod;
+
+    public String getFactoryBean() {
+        return factoryBean;
+    }
+
+    public void setFactoryBean(String factoryBean) {
+        this.factoryBean = factoryBean;
+    }
+
+    public String getFactoryMethod() {
+        return factoryMethod;
+    }
+
+    public void setFactoryMethod(String factoryMethod) {
+        this.factoryMethod = factoryMethod;
+    }
 
     public String getClassName() { return className; }
 
