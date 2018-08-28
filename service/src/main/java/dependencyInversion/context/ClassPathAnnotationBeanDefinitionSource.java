@@ -2,6 +2,7 @@ package dependencyInversion.context;
 
 import dependencyInversion.definition.Definition;
 import dependencyInversion.definition.DefinitionProperty;
+import dependencyInversion.definition.MethodMetadata;
 import dependencyInversion.utils.ClassUtils;
 import dependencyInversion.utils.StringUtils;
 
@@ -28,7 +29,7 @@ public class ClassPathAnnotationBeanDefinitionSource implements BeanDefinitionSo
             scanner.scanFrom(loader);
             List<String> classes = scanner.getClasses();
             for (String clazz : classes) {
-                definitions.add(readDefinition(clazz));
+                definitions.addAll(readDefinition(clazz));
             }
         }catch (Exception e){
             throw new RuntimeException(e);
@@ -36,7 +37,7 @@ public class ClassPathAnnotationBeanDefinitionSource implements BeanDefinitionSo
         return definitions;
     }
 
-    private Definition readDefinition(String clazz) {
+    private Collection<Definition> readDefinition(String clazz) {
         try {
             Class<?> claz = Class.forName(clazz);
             return readDefinition(claz);
@@ -63,8 +64,9 @@ public class ClassPathAnnotationBeanDefinitionSource implements BeanDefinitionSo
                     .filter(method -> method.isAnnotationPresent(Bean.class)).collect(Collectors.toList());
             for (Method method: innerDefs) {
                 Definition innerDef = new Definition();
-                innerDef.setFactoryBean(method.getReturnType().toString());
-                innerDef.setFactoryMethod(method.getName());
+                innerDef.setFactoryBean(method.getReturnType().getSimpleName());
+                MethodMetadata metadata = new MethodMetadata(claz.getCanonicalName(), method.getName());
+                innerDef.setFactoryMethod(metadata);
             }
         }
         defs.addAll(innerDefinitions);

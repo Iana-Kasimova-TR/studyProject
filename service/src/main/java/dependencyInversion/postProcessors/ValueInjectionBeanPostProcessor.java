@@ -2,6 +2,13 @@ package dependencyInversion.postProcessors;
 
 import dependencyInversion.context.ApplicationContext;
 import dependencyInversion.context.ApplicationContextAware;
+import dependencyInversion.context.PropertyPlaceConfigurer;
+import dependencyInversion.context.Value;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by anakasimova on 23/08/2018.
@@ -17,7 +24,14 @@ public class ValueInjectionBeanPostProcessor implements BeanPostProcessor, Appli
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws Exception {
-
+        List<Field> fields = Arrays.stream(bean.getClass().getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(Value.class)).collect(Collectors.toList());
+        PropertyPlaceConfigurer placeConfigurer = applicationContext.getBean(PropertyPlaceConfigurer.class);
+        for(Field field: fields){
+            field.setAccessible(true);
+            field.set(bean, placeConfigurer.getProperty(field.getAnnotation(Value.class).value()));
+        }
+        return bean;
     }
 
     @Override

@@ -5,7 +5,9 @@ import dependencyInversion.definition.Definition;
 import dependencyInversion.scope.Scope;
 import dependencyInversion.scope.SingletonScope;
 import dependencyInversion.utils.ClassUtils;
+import dependencyInversion.utils.StringUtils;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -43,6 +45,18 @@ public class AnnotationBeanFactory implements BeanFactory {
 
     private <T> T instantiate(Definition definition){
         try {
+            if(StringUtils.isNotEmpty(definition.getFactoryBean())){
+
+                Object instance = getBeanFromScope(registry.getBeanDefinition(definition.getFactoryMethod().getDeclaredClassName()));
+                if (instance == null) {
+                    instance = instantiate(registry.getBeanDefinition(definition.getFactoryMethod().getDeclaredClassName()));
+                    addBeanToScope(registry.getBeanDefinition(definition.getFactoryMethod().getDeclaredClassName()), instance);
+                }
+
+                Method factoryMethod = instance.getClass().getDeclaredMethod(definition.getFactoryMethod().getMethodName());
+                return (T)factoryMethod.invoke(instance);
+
+            }
             // todo, don't instantiate twice
             final Class<?> aClass = Class.forName(definition.getClassName());
             return (T) aClass.newInstance();

@@ -19,7 +19,7 @@ public class Definition {
     private String scope;
     private int order = Ordered.DEFAULT_ORDER;
     private String factoryBean;
-    private String factoryMethod;
+    private MethodMetadata factoryMethod;
 
     public String getFactoryBean() {
         return factoryBean;
@@ -29,11 +29,11 @@ public class Definition {
         this.factoryBean = factoryBean;
     }
 
-    public String getFactoryMethod() {
+    public MethodMetadata getFactoryMethod() {
         return factoryMethod;
     }
 
-    public void setFactoryMethod(String factoryMethod) {
+    public void setFactoryMethod(MethodMetadata factoryMethod) {
         this.factoryMethod = factoryMethod;
     }
 

@@ -32,16 +32,12 @@ public abstract class AbstractDataSource implements DataSource {
 
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        if(iface.isInstance(this)) {
-            return this;
-        } else {
-            throw new SQLException("DataSource of type [" + this.getClass().getName() + "] cannot be unwrapped as [" + iface.getName() + "]");
-        }
+        throw new UnsupportedOperationException("unwrap");
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return iface.isInstance(this);
+        throw new UnsupportedOperationException("isWrapperFor");
     }
 
     @Override
