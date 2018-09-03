@@ -2,6 +2,7 @@ package dao;
 
 import entities.Project;
 import entities.ProjectId;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.inject.Named;
 
@@ -10,8 +11,17 @@ import javax.inject.Named;
  */
 @Named
 public class ProjectDAOImpl implements ProjectDAO {
+
+    private JdbcTemplate jdbcTemplate;
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     @Override
     public Project saveProject(Project project) {
+
+
         return null;
     }
 

@@ -18,8 +18,8 @@ public class Definition {
     private Collection<String> interfaces;
     private String scope;
     private int order = Ordered.DEFAULT_ORDER;
-    private String factoryBean;
-    private MethodMetadata factoryMethod;
+    private String factoryBean = "";
+    private String factoryMethod = "";
 
     public String getFactoryBean() {
         return factoryBean;
@@ -29,11 +29,11 @@ public class Definition {
         this.factoryBean = factoryBean;
     }
 
-    public MethodMetadata getFactoryMethod() {
+    public String getFactoryMethod() {
         return factoryMethod;
     }
 
-    public void setFactoryMethod(MethodMetadata factoryMethod) {
+    public void setFactoryMethod(String factoryMethod) {
         this.factoryMethod = factoryMethod;
     }
 

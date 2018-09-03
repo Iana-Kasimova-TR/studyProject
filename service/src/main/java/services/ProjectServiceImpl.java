@@ -3,7 +3,7 @@ package services;
 import dao.ProjectDAO;
 import entities.Project;
 import entities.Task;
-import validation.NonNull;
+import dependencyInversion.validation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;

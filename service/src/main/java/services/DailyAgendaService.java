@@ -1,13 +1,11 @@
 package services;
 
-import dao.TaskDAO;
 import entities.DailyAgenda;
 import entities.Project;
 import entities.Task;
-import validation.NonNull;
+import dependencyInversion.validation.NonNull;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**

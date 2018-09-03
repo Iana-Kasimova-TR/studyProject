@@ -8,6 +8,7 @@ import dependencyInversion.utils.ClassUtils;
 import dependencyInversion.utils.StringUtils;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
@@ -47,21 +48,22 @@ public class AnnotationBeanFactory implements BeanFactory {
         try {
             if(StringUtils.isNotEmpty(definition.getFactoryBean())){
 
-                Object instance = getBeanFromScope(registry.getBeanDefinition(definition.getFactoryMethod().getDeclaredClassName()));
+                Object instance = getBeanFromScope(registry.getBeanDefinition(definition.getFactoryBean()));
                 if (instance == null) {
-                    instance = instantiate(registry.getBeanDefinition(definition.getFactoryMethod().getDeclaredClassName()));
-                    addBeanToScope(registry.getBeanDefinition(definition.getFactoryMethod().getDeclaredClassName()), instance);
+                    instance = instantiate(registry.getBeanDefinition(definition.getFactoryBean()));
+                    addBeanToScope(registry.getBeanDefinition(definition.getFactoryBean()), instance);
                 }
 
-                Method factoryMethod = instance.getClass().getDeclaredMethod(definition.getFactoryMethod().getMethodName());
+                Method factoryMethod = instance.getClass().getDeclaredMethod(definition.getFactoryMethod());
                 return (T)factoryMethod.invoke(instance);
 
+            }else{
+                // todo, don't instantiate twice
+                final Class<?> aClass = Class.forName(definition.getClassName());
+                return (T) aClass.newInstance();
             }
-            // todo, don't instantiate twice
-            final Class<?> aClass = Class.forName(definition.getClassName());
-            return (T) aClass.newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + definition.getClassName());
         }
     }
 

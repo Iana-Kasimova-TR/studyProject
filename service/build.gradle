@@ -4,6 +4,5 @@ version '1.0-SNAPSHOT'
 
 
 dependencies {
-// https://mvnrepository.com/artifact/javax.inject/javax.inject
     compile group: 'javax.inject', name: 'javax.inject', version: '1'
 }

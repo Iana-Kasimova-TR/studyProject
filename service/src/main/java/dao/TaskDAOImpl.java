@@ -1,7 +1,9 @@
 package dao;
 
+
 import entities.Task;
 import entities.TaskId;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.inject.Named;
 import java.time.LocalDateTime;
@@ -11,7 +13,20 @@ import java.util.List;
  * Created by anakasimova on 24/07/2018.
  */
 @Named
-public class TaskDAOImpl implements TaskDAO {
+public abstract class TaskDAOImpl implements TaskDAO {
+
+    private JdbcTemplate jdbcTemplate;
+
+    private String taskTitle;
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setTaskTitle(String taskTitle) {
+        this.taskTitle = taskTitle;
+    }
+
     @Override
     public Task saveTask(Task task) {
         return null;
@@ -36,4 +51,7 @@ public class TaskDAOImpl implements TaskDAO {
     public List<Task> getTasksByRemindDate(LocalDateTime time) {
         return null;
     }
+
+    public abstract Task getNewTask();
+
 }

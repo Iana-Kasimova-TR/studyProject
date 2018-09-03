@@ -61,7 +61,17 @@ public class ClassPathAnnotationScanner implements Scanner{
             String name = f.getName();
             if (f.isDirectory()) {  //if files which we found are also package
                 scan(f, classloader, packagePrefix + name + "/");
-            } else {
+            }else if(name.contains("$"))
+            {
+                //TODO: change parse classpath
+            }
+            else if(name.contains(".properties")){
+                //TODO: change parse classpath
+            }
+            else if(name.contains(".xml")){
+                //TODO: change parse classpath
+            }
+            else {
                 classes.add((packagePrefix + name.substring(0, name.length()-6)).replace("/", "."));
 
             }

@@ -3,7 +3,7 @@ package services;
 import entities.DailyNotificationGroup;
 import entities.Project;
 import entities.Task;
-import validation.NonNull;
+import dependencyInversion.validation.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.List;

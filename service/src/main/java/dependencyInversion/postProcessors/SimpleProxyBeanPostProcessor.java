@@ -1,16 +1,14 @@
 package dependencyInversion.postProcessors;
 
 import dependencyInversion.context.Ordered;
-import validation.NonNull;
+import dependencyInversion.validation.NonNull;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
  * Created by anakasimova on 24/07/2018.
  */
-@Ordered(Ordered.MIN_ORDER)
+@Ordered(Ordered.MIN_ORDER +1)
 public class SimpleProxyBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws Exception {

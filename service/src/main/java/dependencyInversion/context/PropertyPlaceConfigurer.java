@@ -8,6 +8,7 @@ import java.util.Properties;
 /**
  * Created by anakasimova on 23/08/2018.
  */
+@Ordered(Ordered.MIN_ORDER + 2)
 public class PropertyPlaceConfigurer {
 
     private String properties;

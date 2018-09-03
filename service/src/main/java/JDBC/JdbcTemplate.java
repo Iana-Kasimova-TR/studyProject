@@ -1,6 +1,7 @@
 package JDBC;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,20 +10,34 @@ import java.util.Collection;
 /**
  * Created by Iana_Kasimova on 28-Aug-18.
  */
+@Named
 public class JdbcTemplate {
 
     @Inject
     private DataSource dataSource;
 
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     public void executeQuery(String query){
         try(final Connection connection = dataSource.getConnection()){
             final Statement statement = connection.createStatement();
-            statement.executeQuery(query);
+            statement.execute(query);
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
     }
 
+    public void executeUpdate(String query, Object... params){
+        try(final Connection connection = dataSource.getConnection()){
+            final PreparedStatement statement = connection.prepareStatement(query);
+            prepareStatement(statement, params);
+            statement.executeUpdate();
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
     public <T>Collection<T> queryForList(String query, RowMapper<T> mapper, Object... params){
         try(final Connection connection = dataSource.getConnection()){
             final PreparedStatement statement = connection.prepareStatement(query);
@@ -43,7 +58,7 @@ public class JdbcTemplate {
 
         for(int i = 0; i<params.length; i++){
             if(params[i] instanceof String){
-                query.setString(i+1, (String) params[i])
+                query.setString(i+1, (String) params[i]);
             }else if(params[i] instanceof Integer){
                 query.setInt(i+1, (int) params[i]);
             }else{

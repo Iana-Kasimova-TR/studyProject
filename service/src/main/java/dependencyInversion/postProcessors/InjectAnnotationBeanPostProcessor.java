@@ -10,7 +10,7 @@ import java.beans.Statement;
 /**
  * Created by anakasimova on 23/07/2018.
  */
-@Ordered(Ordered.MIN_ORDER)
+@Ordered(Ordered.MIN_ORDER + 2)
 public class InjectAnnotationBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware {
 
 

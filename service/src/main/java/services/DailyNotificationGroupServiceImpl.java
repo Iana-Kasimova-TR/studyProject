@@ -4,7 +4,7 @@ import dao.TaskDAO;
 import entities.DailyNotificationGroup;
 import entities.Project;
 import entities.Task;
-import validation.NonNull;
+import dependencyInversion.validation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;

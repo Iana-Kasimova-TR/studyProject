@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import org.mockito.InjectMocks;
-import validation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;

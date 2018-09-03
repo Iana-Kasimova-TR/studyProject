@@ -1,9 +1,6 @@
 package dependencyInversion.postProcessors;
 
-import dependencyInversion.context.ApplicationContext;
-import dependencyInversion.context.ApplicationContextAware;
-import dependencyInversion.context.PropertyPlaceConfigurer;
-import dependencyInversion.context.Value;
+import dependencyInversion.context.*;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -13,6 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Created by anakasimova on 23/08/2018.
  */
+@Ordered(Ordered.MIN_ORDER)
 public class ValueInjectionBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware {
 
     private ApplicationContext applicationContext;

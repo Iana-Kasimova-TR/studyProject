@@ -1,10 +1,9 @@
 package services;
 
 ;
-import dao.ProjectDAO;
 import entities.Project;
 import entities.Task;
-import validation.NonNull;
+import dependencyInversion.validation.NonNull;
 
 /**
  * Created by anakasimova on 06/07/2018.
