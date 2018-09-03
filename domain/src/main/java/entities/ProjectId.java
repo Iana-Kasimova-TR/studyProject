@@ -16,6 +16,10 @@ public class ProjectId {
         this.id = ID_GENERATOR.getAndIncrement();
     }
 
+    public ProjectId(int id){
+        this.id = id;
+    }
+
     @Override
     public int hashCode(){
         return new HashCodeBuilder(17, 37)

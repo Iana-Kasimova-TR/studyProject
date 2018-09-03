@@ -9,7 +9,7 @@ import entities.Task;
  */
 public interface ProjectDAO {
 
-    Project saveProject(Project project);
+    Project saveOrUpdateProject(Project project);
 
     boolean deleteProject(Project project);
 

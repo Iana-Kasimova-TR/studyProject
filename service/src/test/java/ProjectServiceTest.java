@@ -48,7 +48,7 @@ public class ProjectServiceTest {
     public void testSaveProject(){
         String description = "Adventures in Rome";
         project.setDescription(description);
-        assertThat(projectService.saveProject(project).getDescription()).isEqualTo(project.getDescription());
+        assertThat(projectService.saveOrUpdateProject(project).getDescription()).isEqualTo(project.getDescription());
     }
 
     @Test

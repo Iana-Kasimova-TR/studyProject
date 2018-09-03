@@ -89,7 +89,7 @@ public class DailyAgendaserviceTest {
         Task task1 = taskService.createTask("buy ticket to Rome");
         task1.setDeadline(localTodayTime);
         project2.getTasks().add(task1);
-        project2 = projectService.saveProject(project2);
+        project2 = projectService.saveOrUpdateProject(project2);
 
         Task task2 = taskService.createTask("meeet friends");
         task2.setDeadline(localTodayTime);

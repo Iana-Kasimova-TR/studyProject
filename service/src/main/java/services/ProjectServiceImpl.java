@@ -3,7 +3,6 @@ package services;
 import dao.ProjectDAO;
 import entities.Project;
 import entities.Task;
-import dependencyInversion.validation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,12 +26,12 @@ public class ProjectServiceImpl implements ProjectService {
           throw new RuntimeException("you cannot create project without title!");
       }
       Project project = new Project(title);
-      return projectDAO.saveProject(project);
+      return projectDAO.saveOrUpdateProject(project);
     }
 
     @Override
     public Project saveProject(Project project) {
-        return projectDAO.saveProject(project);
+        return projectDAO.saveOrUpdateProject(project);
     }
 
     @Override
@@ -44,14 +43,14 @@ public class ProjectServiceImpl implements ProjectService {
     public Project addTaskToProject(Project project, Task task) {
         project.getTasks().add(task);
         task.setProject(project);
-        return projectDAO.saveProject(project);
+        return projectDAO.saveOrUpdateProject(project);
     }
 
     @Override
     public Project deleteTaskFromProject(Project project, Task task) throws RuntimeException{
         project.getTasks().remove(task);
         task.setProject(null);
-        return projectDAO.saveProject(project);
+        return projectDAO.saveOrUpdateProject(project);
 
     }
 }
