@@ -10,6 +10,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ProjectId {
     private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
+
+    public int getId() {
+        return id;
+    }
+
     private final int id;
 
     public ProjectId() {

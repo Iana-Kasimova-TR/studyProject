@@ -13,6 +13,10 @@ public class TaskId {
     private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
     private final int id;
 
+    public int getId() {
+        return id;
+    }
+
     public TaskId() {
         this.id = ID_GENERATOR.getAndIncrement();
     }
