@@ -17,7 +17,7 @@ public class InMemoryTaskDao implements TaskDAO {
     private final Map<TaskId, Task> storage = new HashMap<>();
 
     @Override
-    public Task saveTask(Task task) {
+    public Task saveOrUpdateTask(Task task) {
         if (task.getId() == null) {
             task.setId(new TaskId());
         }

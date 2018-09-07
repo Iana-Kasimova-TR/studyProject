@@ -1,5 +1,6 @@
 package entities;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class Project {
 
-    private String name;
+    private String title;
     private String description;
     private List<Task> tasks = new ArrayList<>();
     private ProjectId id;
@@ -20,16 +21,16 @@ public class Project {
         this.id = id;
     }
 
-    public Project(String name) {
-        this.name = name;
+    public Project(String title) {
+        this.title = title;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -56,7 +57,7 @@ public class Project {
     public int hashCode() {
 
         return new HashCodeBuilder(17, 37)
-                .append(name)
+                .append(title)
                 .append(description)
                 .append(tasks)
                 .append(id)
@@ -66,16 +67,22 @@ public class Project {
     @Override
     public boolean equals(Object o) {
 
+        boolean isEquals;
+
         if (o == this) return true;
         if (!(o instanceof Project)) return false;
 
         Project project = (Project) o;
 
-        return new EqualsBuilder()
-                .append(name, project.name)
+        isEquals = new EqualsBuilder()
+                .append(title, project.title)
                 .append(description, project.description)
-                .append(tasks, project.tasks)
                 .append(id, project.id)
                 .isEquals();
+        if(isEquals){
+           isEquals = CollectionUtils.isEqualCollection(tasks, project.getTasks());
+        }
+
+        return isEquals;
     }
 }

@@ -11,24 +11,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ProjectId {
     private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
 
-    public int getId() {
-        return id;
+    public int getValue() {
+        return value;
     }
 
-    private final int id;
+    private final int value;
 
     public ProjectId() {
-        this.id = ID_GENERATOR.getAndIncrement();
+        this.value = ID_GENERATOR.getAndIncrement();
     }
 
-    public ProjectId(int id){
-        this.id = id;
+    public ProjectId(int value){
+        this.value = value;
     }
 
     @Override
     public int hashCode(){
         return new HashCodeBuilder(17, 37)
-                .append(id)
+                .append(value)
                 .toHashCode();
     }
 
@@ -41,7 +41,7 @@ public class ProjectId {
         ProjectId id = (ProjectId) o;
 
         return new EqualsBuilder()
-                .append(id, id.id)
+                .append(id, id.value)
                 .isEquals();
     }
 }

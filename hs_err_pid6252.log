@@ -16,7 +16,7 @@
 
 ---------------  T H R E A D  ---------------
 
-Current thread (0x00007fed40843000):  JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, id=16899, stack(0x0000700007835000,0x0000700007935000)]
+Current thread (0x00007fed40843000):  JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, value=16899, stack(0x0000700007835000,0x0000700007935000)]
 
 siginfo: si_signo: 11 (SIGSEGV), si_code: 0 (unknown), si_addr: 0x0000000000000000
 
@@ -110,21 +110,21 @@ C  0x0000000000000000
 ---------------  P R O C E S S  ---------------
 
 Java Threads: ( => current thread )
-  0x00007fed3f0c4000 JavaThread "Service Thread" daemon [_thread_blocked, id=19971, stack(0x0000700007e47000,0x0000700007f47000)]
-  0x00007fed3f06b000 JavaThread "C1 CompilerThread2" daemon [_thread_blocked, id=19459, stack(0x0000700007d44000,0x0000700007e44000)]
-  0x00007fed4006e800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=18947, stack(0x0000700007c41000,0x0000700007d41000)]
-  0x00007fed40048800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=18435, stack(0x0000700007b3e000,0x0000700007c3e000)]
-  0x00007fed40844800 JavaThread "JDWP Command Reader" daemon [_thread_in_native, id=17923, stack(0x0000700007a3b000,0x0000700007b3b000)]
-  0x00007fed40844000 JavaThread "JDWP Event Helper Thread" daemon [_thread_blocked, id=17411, stack(0x0000700007938000,0x0000700007a38000)]
-=>0x00007fed40843000 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, id=16899, stack(0x0000700007835000,0x0000700007935000)]
-  0x00007fed3f80d000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=16387, stack(0x0000700007732000,0x0000700007832000)]
-  0x00007fed4002a800 JavaThread "Finalizer" daemon [_thread_blocked, id=12547, stack(0x000070000762f000,0x000070000772f000)]
-  0x00007fed40836800 JavaThread "Reference Handler" daemon [_thread_blocked, id=12035, stack(0x000070000752c000,0x000070000762c000)]
-  0x00007fed3f006800 JavaThread "main" [_thread_blocked, id=3587, stack(0x0000700006d91000,0x0000700006e91000)]
+  0x00007fed3f0c4000 JavaThread "Service Thread" daemon [_thread_blocked, value=19971, stack(0x0000700007e47000,0x0000700007f47000)]
+  0x00007fed3f06b000 JavaThread "C1 CompilerThread2" daemon [_thread_blocked, value=19459, stack(0x0000700007d44000,0x0000700007e44000)]
+  0x00007fed4006e800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, value=18947, stack(0x0000700007c41000,0x0000700007d41000)]
+  0x00007fed40048800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, value=18435, stack(0x0000700007b3e000,0x0000700007c3e000)]
+  0x00007fed40844800 JavaThread "JDWP Command Reader" daemon [_thread_in_native, value=17923, stack(0x0000700007a3b000,0x0000700007b3b000)]
+  0x00007fed40844000 JavaThread "JDWP Event Helper Thread" daemon [_thread_blocked, value=17411, stack(0x0000700007938000,0x0000700007a38000)]
+=>0x00007fed40843000 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, value=16899, stack(0x0000700007835000,0x0000700007935000)]
+  0x00007fed3f80d000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, value=16387, stack(0x0000700007732000,0x0000700007832000)]
+  0x00007fed4002a800 JavaThread "Finalizer" daemon [_thread_blocked, value=12547, stack(0x000070000762f000,0x000070000772f000)]
+  0x00007fed40836800 JavaThread "Reference Handler" daemon [_thread_blocked, value=12035, stack(0x000070000752c000,0x000070000762c000)]
+  0x00007fed3f006800 JavaThread "main" [_thread_blocked, value=3587, stack(0x0000700006d91000,0x0000700006e91000)]
 
 Other Threads:
-  0x00007fed3f808800 VMThread [stack: 0x0000700007429000,0x0000700007529000] [id=11523]
-  0x00007fed4006f800 WatcherThread [stack: 0x0000700007f4a000,0x000070000804a000] [id=20483]
+  0x00007fed3f808800 VMThread [stack: 0x0000700007429000,0x0000700007529000] [value=11523]
+  0x00007fed4006f800 WatcherThread [stack: 0x0000700007f4a000,0x000070000804a000] [value=20483]
 
 VM state:not at safepoint (normal execution)
 
@@ -172,8 +172,8 @@ Deoptimization events (0 events):
 No events
 
 Internal exceptions (4 events):
-Event: 0.062 Thread 0x00007fed3f006800 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.defineClass(Ljava/lang/String;[BII)Ljava/lang/Class; name or signature does not match> (0x0000000795587cc0) thrown at [/HUDSON3/workspace/8-2-build-macosx-x86_64/jdk8u101/7261/hotspot/src/
-Event: 0.062 Thread 0x00007fed3f006800 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.prefetchRead(Ljava/lang/Object;J)V name or signature does not match> (0x0000000795587fa8) thrown at [/HUDSON3/workspace/8-2-build-macosx-x86_64/jdk8u101/7261/hotspot/src/share/vm/prims/jni
+Event: 0.062 Thread 0x00007fed3f006800 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.defineClass(Ljava/lang/String;[BII)Ljava/lang/Class; title or signature does not match> (0x0000000795587cc0) thrown at [/HUDSON3/workspace/8-2-build-macosx-x86_64/jdk8u101/7261/hotspot/src/
+Event: 0.062 Thread 0x00007fed3f006800 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.prefetchRead(Ljava/lang/Object;J)V title or signature does not match> (0x0000000795587fa8) thrown at [/HUDSON3/workspace/8-2-build-macosx-x86_64/jdk8u101/7261/hotspot/src/share/vm/prims/jni
 Event: 7.568 Thread 0x00007fed3f006800 Exception <a 'java/lang/NoSuchFieldError': method resolution failed> (0x0000000795a93410) thrown at [/HUDSON3/workspace/8-2-build-macosx-x86_64/jdk8u101/7261/hotspot/src/share/vm/prims/methodHandles.cpp, line 1146]
 Event: 7.618 Thread 0x00007fed3f006800 Exception <a 'java/lang/NoSuchFieldError': method resolution failed> (0x0000000795aa1030) thrown at [/HUDSON3/workspace/8-2-build-macosx-x86_64/jdk8u101/7261/hotspot/src/share/vm/prims/methodHandles.cpp, line 1146]
 

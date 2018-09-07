@@ -16,7 +16,7 @@ public interface TaskService {
 
     Task addSubTask(@NonNull Task parentTask, @NonNull Task subTask);
 
-    Task deleteSubTask(@NonNull Task parentTask, @NonNull Task subTask);
+    Task deleteSubTaskFromTask(@NonNull Task parentTask, @NonNull Task subTask);
 
     Task doExecute(@NonNull Task task);
 

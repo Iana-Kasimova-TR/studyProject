@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface TaskDAO {
 
-    Task saveTask(Task task);
+    Task saveOrUpdateTask(Task task);
 
     boolean deleteTask(Task task);
 

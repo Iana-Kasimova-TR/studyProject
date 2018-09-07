@@ -41,7 +41,7 @@ public class ProjectServiceTest {
     @Test
     public void testCreateProject(){
 
-        assertThat(projectDAO.getProject(project.getId())).isEqualTo(project);
+        assertThat(projectDAO.getProject(project.getValue())).isEqualTo(project);
     }
 
     @Test
@@ -60,17 +60,17 @@ public class ProjectServiceTest {
     public void testAddTaskToProject(){
         Task task = new Task("task");
         assertThat(projectService.addTaskToProject(project, task).getTasks().contains(task)).isTrue();
-        assertThat(taskService.saveTask(task).getProject()).isEqualTo(project);
+        assertThat(taskService.saveOrUpdateTask(task).getProject()).isEqualTo(project);
     }
 
     @Test(expected = RuntimeException.class)
     public void testDeleteTaskFromProject(){
         Task task = new Task("task");
         project = projectService.addTaskToProject(project, task);
-        task = taskService.saveTask(task);
+        task = taskService.saveOrUpdateTask(task);
 
         task.setProject(null);
         assertThat(projectService.deleteTaskFromProject(project, task).getTasks().contains(task)).isFalse();
-        assertThat(taskService.saveTask(task).getProject()).isNull();
+        assertThat(taskService.saveOrUpdateTask(task).getProject()).isNull();
     }*/
 }

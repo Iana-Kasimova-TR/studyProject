@@ -2,7 +2,6 @@ package services;
 
 import dao.TaskDAO;
 import entities.Task;
-import dependencyInversion.validation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,18 +32,18 @@ public class TaskServiceImpl implements TaskService {
             throw new RuntimeException("you cannot create task without title!");
         }
         Task task = new Task(title);
-        return taskDAO.saveTask(task);
+        return taskDAO.saveOrUpdateTask(task);
     }
 
     @Override
     public Task saveTask(Task task) {
-        return taskDAO.saveTask(task);
+        return taskDAO.saveOrUpdateTask(task);
     }
 
     @Override
     public boolean deleteTask(Task task) {
         if(task.getParentTask() != null){
-            this.deleteSubTask(task.getParentTask(), task);
+            this.deleteSubTaskFromTask(task.getParentTask(), task);
         }
         if(task.getProject() != null) {
             projectService.deleteTaskFromProject(task.getProject(), task);
@@ -65,22 +64,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task deleteSubTask(Task parentTask, Task subTask) {
+    public Task deleteSubTaskFromTask(Task parentTask, Task subTask) {
         parentTask.getSubTasks().remove(subTask);
         subTask.setParentTask(null);
         if(parentTask.getProject() != null){
            projectService.deleteTaskFromProject(parentTask.getProject(), subTask);
            subTask.setProject(null);
         }
-        taskDAO.saveTask(parentTask);
-        return taskDAO.saveTask(subTask);
+        taskDAO.saveOrUpdateTask(parentTask);
+        return taskDAO.saveOrUpdateTask(subTask);
     }
 
     @Override
     public Task doExecute(Task task) {
         task.setDone(true);
         task.setPercentOfReadiness(100);
-        taskDAO.saveTask(task);
+        taskDAO.saveOrUpdateTask(task);
         return task;
     }
 

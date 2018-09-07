@@ -54,8 +54,8 @@ public class DailyAgendaserviceTest {
 
         task1.setDeadline(localTodayTime);
         task2.setDeadline(localTodayTime);
-        task1 = taskService.saveTask(task1);
-        task2 = taskService.saveTask(task2);
+        task1 = taskService.saveOrUpdateTask(task1);
+        task2 = taskService.saveOrUpdateTask(task2);
 
         DailyAgenda agenda = agendaService.createDailyAgenda(localTodayTime);
         assertThat(agenda.getDailyTasks()).isEqualTo(Arrays.asList(task1, task2));
@@ -71,8 +71,8 @@ public class DailyAgendaserviceTest {
 
         task1.setDeadline(localYesterdayTime);
         task2.setDeadline(localYesterdayTime);
-        task1 = taskService.saveTask(task1);
-        task2 = taskService.saveTask(task2);
+        task1 = taskService.saveOrUpdateTask(task1);
+        task2 = taskService.saveOrUpdateTask(task2);
 
 
         DailyAgenda agenda = agendaService.createDailyAgenda(localTodayTime);
@@ -93,7 +93,7 @@ public class DailyAgendaserviceTest {
 
         Task task2 = taskService.createTask("meeet friends");
         task2.setDeadline(localTodayTime);
-        task2 = taskService.saveTask(task2);
+        task2 = taskService.saveOrUpdateTask(task2);
         Task task3 = taskService.createTask("go swim");
 
         DailyAgenda agenda = agendaService.createDailyAgenda(localTodayTime, Arrays.asList(project1, project2), Arrays.asList(task1, task2, task3));

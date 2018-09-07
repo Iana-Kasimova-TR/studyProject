@@ -14,7 +14,7 @@ public class InMemoryProjectDao implements ProjectDAO{
 
     private final Map<ProjectId, Project> storage = new HashMap<>();
 
-    public Project saveProject(Project project){
+    public Project saveOrUpdateProject(Project project){
         if(project.getId() == null){
             project.setId(new ProjectId());
         }

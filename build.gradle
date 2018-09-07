@@ -25,7 +25,8 @@ allprojects{
                      [group: 'org.springframework', name: 'spring-beans', version: '5.0.8.RELEASE'],
                      [group: 'org.springframework', name: 'spring-core', version: '5.0.8.RELEASE'],
                      [group: 'org.springframework', name: 'spring-jdbc', version: '5.0.8.RELEASE'],
-                     [group:'com.h2database', name: 'h2', version: '1.4.197']
+                     [group:'com.h2database', name: 'h2', version: '1.4.197'],
+                     [group: 'org.apache.commons', name: 'commons-collections4', version: '4.1']
 
          )
     }

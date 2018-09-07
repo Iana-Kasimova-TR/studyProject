@@ -1,6 +1,7 @@
 package entities;
 
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -130,17 +131,19 @@ public class Task {
 
     @Override
     public boolean equals(Object o){
+
+        boolean isEquals;
+
         if(o == this) return true;
         if(!(o instanceof Task)) return  false;
 
         Task task = (Task) o;
 
-        return new EqualsBuilder()
+        isEquals =  new EqualsBuilder()
                 .append(id, task.id)
                 .append(title, task.title)
                 .append(description, task.description)
                 .append(isDone, task.isDone)
-                .append(subTasks, task.subTasks)
                 .append(deadline, task.deadline)
                 .append(remindDate, task.remindDate)
                 .append(priority, task.priority)
@@ -148,5 +151,11 @@ public class Task {
                 .append(parentTask, task.parentTask)
                 .append(project, task.project)
                 .isEquals();
+
+        if(isEquals){
+            isEquals = CollectionUtils.isEqualCollection(subTasks, task.getSubTasks());
+        }
+
+        return isEquals;
     }
 }

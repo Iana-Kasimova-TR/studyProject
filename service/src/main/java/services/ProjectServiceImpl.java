@@ -16,6 +16,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Inject
     private ProjectDAO projectDAO;
 
+    @Inject
+    private TaskService taskService;
+
     public void setProjectDAO(ProjectDAO projectDAO) {
         this.projectDAO = projectDAO;
     }
@@ -43,6 +46,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Project addTaskToProject(Project project, Task task) {
         project.getTasks().add(task);
         task.setProject(project);
+        taskService.saveTask(task);
         return projectDAO.saveOrUpdateProject(project);
     }
 
@@ -50,6 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Project deleteTaskFromProject(Project project, Task task) throws RuntimeException{
         project.getTasks().remove(task);
         task.setProject(null);
+        taskService.saveTask(task);
         return projectDAO.saveOrUpdateProject(project);
 
     }

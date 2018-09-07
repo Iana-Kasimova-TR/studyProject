@@ -6,37 +6,37 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="projectDao" class="dao.ProjectDAOImpl" init-method="init" destroy-method="destroy" lazy-init="true" depends-on="taskDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    <bean value="projectDao" class="dao.daoImpl.ProjectDAOImpl" init-method="init" destroy-method="destroy" lazy-init="true" depends-on="taskDao">
+        <property title="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
 
-    <bean id="taskFactory" class="services.TaskTitleFactory"/>
+    <bean value="taskFactory" class="services.TaskTitleFactory"/>
 
-    <bean id="newTask" class="domain.Task" scope="prototype"/>
+    <bean value="newTask" class="domain.Task" scope="prototype"/>
 
-    <bean id="taskDao" class="dao.TaskDAOImpl" init-method="init" destroy-method="destroy" lazy-init="true">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
-        <property name="taskTitle" >
+    <bean value="taskDao" class="dao.daoImpl.TaskDAOImpl" init-method="init" destroy-method="destroy" lazy-init="true">
+        <property title="jdbcTemplate" ref="jdbcTemplate"/>
+        <property title="taskTitle" >
             <bean factory-bean="taskFactory" factory-method="getTaskTitle"></bean>
         </property>
-        <lookup-method name="getNewTask" bean="newTask"/>
+        <lookup-method title="getNewTask" bean="newTask"/>
     </bean>
 
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
+    <bean value="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property title="dataSource" ref="dataSource"/>
     </bean>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations" value="classpath:configuration.properties" />
+        <property title="locations" value="classpath:configuration.properties" />
     </bean>
 
-    <bean id="dataSource"
+    <bean value="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="${jdbc.driver}" />
-        <property name="url" value="${jdbc.url}" />
-        <property name="username" value="${jdbc.username}" />
-        <property name="password" value="${jdbc.password}" />
+        <property title="driverClassName" value="${jdbc.driver}" />
+        <property title="url" value="${jdbc.url}" />
+        <property title="username" value="${jdbc.username}" />
+        <property title="password" value="${jdbc.password}" />
     </bean>
 
 </beans>

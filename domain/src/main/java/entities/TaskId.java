@@ -11,20 +11,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TaskId {
 
     private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
-    private final int id;
+    private final int value;
 
-    public int getId() {
-        return id;
+    public int getValue() {
+        return value;
     }
 
     public TaskId() {
-        this.id = ID_GENERATOR.getAndIncrement();
+        this.value = ID_GENERATOR.getAndIncrement();
+    }
+
+    public TaskId(int value) {
+        this.value = value;
     }
 
     @Override
     public int hashCode(){
         return new HashCodeBuilder(17, 37)
-                .append(id)
+                .append(value)
                 .toHashCode();
     }
 
@@ -37,7 +41,7 @@ public class TaskId {
         TaskId id = (TaskId) o;
 
         return new EqualsBuilder()
-                .append(id, id.id)
+                .append(id, id.value)
                 .isEquals();
     }
 }
