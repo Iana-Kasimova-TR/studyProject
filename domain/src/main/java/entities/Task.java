@@ -7,7 +7,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,15 +16,24 @@ public class Task {
 
     private String description;
     private String title;
-    private boolean isDone;
+    private boolean isDone = false;
     private List<Task> subTasks = new ArrayList<>();
     private LocalDateTime deadline;
     private LocalDateTime remindDate;
     private Priority priority;
-    private float percentOfReadiness;
+    private double percentOfReadiness;
     private Task parentTask;
     private  TaskId id;
     private Project project;
+    private boolean deleted;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public void setId(TaskId id) {
         this.id = id;
@@ -92,11 +100,11 @@ public class Task {
         this.priority = priority;
     }
 
-    public float getPercentOfReadiness() {
+    public double getPercentOfReadiness() {
         return percentOfReadiness;
     }
 
-    public void setPercentOfReadiness(float percentOfReadiness) {
+    public void setPercentOfReadiness(double percentOfReadiness) {
         this.percentOfReadiness = percentOfReadiness;
     }
 
@@ -106,7 +114,12 @@ public class Task {
 
     public Project getProject() { return project; }
 
-    public void setProject(Project project) { this.project = project; }
+    public void setProject(Project project) {
+        this.project = project;
+        for (Task subTask : getSubTasks()) {
+            subTask.setProject(project);
+        }
+    }
 
     public void setParentTask(Task parentTask) { this.parentTask = parentTask; }
 

@@ -44,6 +44,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project addTaskToProject(Project project, Task task) {
+        if(task.getParentTask() != null){
+            if(!task.getParentTask().getProject().equals(project)){
+                throw new RuntimeException("parent task and sub task should be have the same project!");
+            }
+        }
         project.getTasks().add(task);
         task.setProject(project);
         taskService.saveTask(task);

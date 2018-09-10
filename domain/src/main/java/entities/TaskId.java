@@ -17,9 +17,9 @@ public class TaskId {
         return value;
     }
 
-    public TaskId() {
-        this.value = ID_GENERATOR.getAndIncrement();
-    }
+   // public TaskId() {
+    //    this.value = ID_GENERATOR.getAndIncrement();
+   // }
 
     public TaskId(int value) {
         this.value = value;

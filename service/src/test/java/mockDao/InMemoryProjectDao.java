@@ -10,9 +10,9 @@ import java.util.Map;
 /**
  * Created by anakasimova on 16/07/2018.
  */
-public class InMemoryProjectDao implements ProjectDAO{
+public class InMemoryProjectDao {
 
-    private final Map<ProjectId, Project> storage = new HashMap<>();
+  /*  private final Map<ProjectId, Project> storage = new HashMap<>();
 
     public Project saveOrUpdateProject(Project project){
         if(project.getId() == null){
@@ -29,5 +29,5 @@ public class InMemoryProjectDao implements ProjectDAO{
 
     public Project getProject(ProjectId id){
         return storage.get(id);
-    }
+    }*/
 }

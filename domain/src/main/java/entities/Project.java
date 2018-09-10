@@ -14,8 +14,17 @@ public class Project {
 
     private String title;
     private String description;
+    private boolean deleted;
     private List<Task> tasks = new ArrayList<>();
     private ProjectId id;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public void setId(ProjectId id) {
         this.id = id;

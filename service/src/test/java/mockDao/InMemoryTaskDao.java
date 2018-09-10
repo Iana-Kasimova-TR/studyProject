@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 /**
  * Created by anakasimova on 10/07/2018.
  */
-public class InMemoryTaskDao implements TaskDAO {
-    private final Map<TaskId, Task> storage = new HashMap<>();
+public class InMemoryTaskDao{
+    /*private final Map<TaskId, Task> storage = new HashMap<>();
 
     @Override
     public Task saveOrUpdateTask(Task task) {
@@ -46,5 +46,5 @@ public class InMemoryTaskDao implements TaskDAO {
     @Override
     public List<Task> getTasksByRemindDate(LocalDateTime time) {
         return null;
-    }
+    }*/
 }

@@ -32,7 +32,7 @@ public class TaskServiceImpl implements TaskService {
             throw new RuntimeException("you cannot create task without title!");
         }
         Task task = new Task(title);
-        return taskDAO.saveOrUpdateTask(task);
+        return saveTask(task);
     }
 
     @Override
@@ -48,7 +48,10 @@ public class TaskServiceImpl implements TaskService {
         if(task.getProject() != null) {
             projectService.deleteTaskFromProject(task.getProject(), task);
         }
-        return taskDAO.deleteTask(task);
+        task.setDeleted(true);
+        saveTask(task);
+
+        return true;
     }
 
     @Override
@@ -58,6 +61,7 @@ public class TaskServiceImpl implements TaskService {
         if(parentTask.getProject() != null){
             subTask.setProject(parentTask.getProject());
             projectService.addTaskToProject(parentTask.getProject(), subTask);
+            return saveTask(parentTask);
         }
         saveTask(subTask);
         return saveTask(parentTask);
@@ -69,17 +73,17 @@ public class TaskServiceImpl implements TaskService {
         subTask.setParentTask(null);
         if(parentTask.getProject() != null){
            projectService.deleteTaskFromProject(parentTask.getProject(), subTask);
-           subTask.setProject(null);
+            return saveTask(parentTask);
         }
-        taskDAO.saveOrUpdateTask(parentTask);
-        return taskDAO.saveOrUpdateTask(subTask);
+        saveTask(subTask);
+        return saveTask(parentTask);
     }
 
     @Override
     public Task doExecute(Task task) {
         task.setDone(true);
         task.setPercentOfReadiness(100);
-        taskDAO.saveOrUpdateTask(task);
+        saveTask(task);
         return task;
     }
 

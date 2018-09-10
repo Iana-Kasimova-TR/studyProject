@@ -4,163 +4,217 @@ package dao.daoImpl;
 import dao.ProjectDAO;
 import dao.TaskDAO;
 import dao.mappers.TaskMapper;
-import entities.Project;
-import entities.ProjectId;
-import entities.Task;
-import entities.TaskId;
-import org.apache.commons.collections4.CollectionUtils;
+import dao.utils.TaskAttribute;
+import entities.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.sql.*;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.Types;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by anakasimova on 24/07/2018.
  */
 @Named
-public abstract class TaskDAOImpl implements TaskDAO {
+public class TaskDAOImpl implements TaskDAO {
 
-    @Inject
-    private ProjectDAOImpl projDAO;
+    @Inject ProjectDAO projDAO;
 
     @Inject
     private JdbcTemplate jdbcTemplate;
 
-    private final String SQL_SAVE_TASK = "insert into TASKS(task_title, task_description, is_done, task_deadline, " +
-            "task_remind_date, task_priority, percent_Readiness, parent_task_id, project_id, is_deleted_from_project, is_deleted) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private final String SQL_GET_SUBTASKS_FOR_TASK = "select * from TASKS where parent_task_id=?";
-    private final String SQL_DELETE_TASK = "update TASKS set is_deleted=1 where task_id=?";
-
-
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
-    public Task saveOrUpdateTask(Task task) {
 
-        //create new task
-        if(task.getId() == null){
-
-            TaskId taskId = new TaskId(jdbcTemplate.update(con -> {
-                PreparedStatement ps = con.prepareStatement(SQL_SAVE_TASK, new String[]{"id"});
-                ps.setString(2, task.getTitle());
-                ps.setString(3, task.getDescription());
-                ps.setBoolean(4, Boolean.valueOf(task.isDone()));
-
-                if(task.getDeadline() != null) {
-                    ps.setDate(5, Date.valueOf(task.getDeadline().toLocalDate()));
-                }
-                else {
-                    ps.setNull(5, Types.DATE);
-                }
-                if(task.getRemindDate() != null) {
-                    ps.setDate(6, Date.valueOf(task.getRemindDate().toLocalDate()));
-                }
-                else {
-                    ps.setNull(6, Types.DATE);
-                }
-                if(task.getPriority() != null) {
-                    ps.setString(7, task.getPriority().name());
-                }else{
-                    ps.setNull(7, Types.CHAR);
-                }
-                ps.setFloat(8, Float.valueOf(task.getPercentOfReadiness()));
-                if(task.getParentTask() != null){
-                    ps.setInt(9, task.getParentTask().getId().getValue());
-                }else{
-                    ps.setNull(9, Types.INTEGER);
-                }
-                if(task.getProject() != null){
-                    ps.setInt(10, task.getProject().getId().getValue());
-                }else{
-                    ps.setNull(10, Types.INTEGER);
-                }
-                ps.setBoolean(11, (task.getProject() != null));
-                ps.setBoolean(12, false);
-                return ps;
-            }, new GeneratedKeyHolder()));
-
-
-            //we add parent task in subtask(subtasks of these subtask already have parent task)
-            if(!task.getSubTasks().isEmpty()){
-                for (Task subTask : task.getSubTasks()){
-                    jdbcTemplate.update("update TASKS set parent_task_id=? where task_id=?", subTask.getParentTask().getId().getValue(), subTask.getId().getValue());
-                }
-            }
-
-            task.setId(taskId);
-
-            return task;
-        }
-
-        //if we update existing task
-        Task taskFromDB = (Task) jdbcTemplate.query("select task_title, task_description, is_done, task_deadline, " +
-                "task_remind_date, task_priority, percent_Readiness where task_id", new TaskMapper(), task.getId().getValue());
-
-
-        ProjectId projectId = new ProjectId(jdbcTemplate.queryForObject("select project_id from TASKS where task_id=?",
-                new Integer[]{task.getId().getValue()} , Integer.class);
-
-        taskFromDB.setProject(projDAO.getProject(projectId));
-        taskFromDB.setSubTasks(getSubTasksForTask(taskFromDB.getProject(), task));
-
-        if(!task.equals(taskFromDB)){
-            updateTask(task, taskFromDB);
-        }
-
-        return task;
+    public void setProjDAO(ProjectDAO projDAO) {
+        this.projDAO = projDAO;
     }
+
 
     @Override
     public Task getTask(TaskId id) {
-        return null;
+
+        if(id == null){
+            throw new RuntimeException("id should not be null!");
+        }
+
+        if(!taskExists(id)){
+            return null;
+        }
+
+        if (isProjectTask(id)) {
+            // get project with subtasks
+            // return subtask from project
+            Project project = projDAO.getProject(getTaskProject(id));
+            return getTask(project.getTasks(), id);
+        } else {
+            // get top-parent task
+            // get task from the middle
+            TaskId parentId = getTaskParentId(id);
+            if (parentId != null) {
+                while (getTaskParentId(parentId) != null) {
+                    parentId = getTaskParentId(parentId);
+                }
+            } else {
+                parentId = id;
+            }
+            // parentId - top-parent task id
+            Task topParentTask = jdbcTemplate.queryForObject("select TITLE, DEADLINE, DESCRIPTION, IS_DONE, REMIND_DATE, PRIORITY, PERCENT_OF_READINESS" +
+                    "IS_DELETED from TASKS where ID=?", new Object[]{parentId.getValue()}, new TaskMapper());
+            topParentTask.setSubTasks(getSubtasks(topParentTask));
+            if (topParentTask.getId().equals(id)) {
+                return topParentTask;
+            } else {
+                return getTask(topParentTask.getSubTasks(), id);
+            }
+        }
     }
 
     @Override
     public List<Task> getTasksByFinishDate(LocalDateTime time) {
-        return null;
+        if(time == null){
+            throw new RuntimeException("time should not be null!");
+        }
+
+        return getTasksByDate("DEADLINE", time);
     }
+
 
     @Override
     public List<Task> getTasksByRemindDate(LocalDateTime time) {
-        return null;
+
+        if(time == null){
+            throw new RuntimeException("time should not be null!");
+        }
+
+        return getTasksByDate("REMIND_DATE", time);
     }
+
 
     @Override
     public boolean deleteTask(Task task){
-        jdbcTemplate.update(SQL_DELETE_TASK, task.getId().getValue());
-        if(!task.getSubTasks().isEmpty()){
-            for(Task subTask : task.getSubTasks()){
-                deleteTask(subTask);
+        if(task == null){
+            throw new RuntimeException("task should not be null!");
+        }
+        task.setDeleted(true);
+        for (Task subtask : task.getSubTasks()) {
+            subtask.setDeleted(true);
+            saveOrUpdateTask(subtask);
+        }
+        saveOrUpdateTask(task);
+
+        return true;
+    }
+
+
+    @Override
+    public Task saveOrUpdateTask(Task task) {
+        if(task == null){
+            throw new RuntimeException("task should not be null!");
+        }
+
+        String sqlQuery;
+        Map<TaskAttribute, Object> params = new EnumMap<>(TaskAttribute.class);
+        params.put(TaskAttribute.ID, task.getId());
+        params.put(TaskAttribute.TITLE, task.getTitle());
+        params.put(TaskAttribute.DESCRIPTION, task.getDescription());
+        params.put(TaskAttribute.IS_DONE, task.isDone());
+        params.put(TaskAttribute.DEADLINE, task.getDeadline());
+        params.put(TaskAttribute.REMIND_DATE, task.getRemindDate());
+        params.put(TaskAttribute.PRIORITY, task.getPriority());
+        params.put(TaskAttribute.PERCENT_OF_READINESS, task.getPercentOfReadiness());
+        params.put(TaskAttribute.PARENT_TASK_ID, task.getParentTask());
+        params.put(TaskAttribute.PROJECT_ID, task.getProject());
+        params.put(TaskAttribute.IS_DELETED_FROM_PROJECT, !(task.getProject() != null));
+        params.put(TaskAttribute.IS_DELETED, task.isDeleted());
+
+
+        if(params.get(TaskAttribute.ID)==null){
+            sqlQuery = String.format("INSERT INTO TASKS(%s) VALUES (%s)",
+                    params.keySet().stream().map(el -> el.name()).collect(Collectors.joining(", ")),
+                    params.values().stream().map(el ->"?").collect(Collectors.joining(", "))
+            );
+        }else{
+            sqlQuery = String.format("UPDATE TASKS SET %s where %s=%s",
+                    params.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().name(), entry -> "?")).entrySet().stream()
+                            .collect(Collectors.toList()).toString().replace("[", "").replace("]", ""),
+                    params.keySet().stream().filter( el -> el.name().equals("ID")).findAny().orElse(null),
+                    params.get(TaskAttribute.ID)
+            );
+        }
+
+
+
+        TaskId taskId = new TaskId(jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sqlQuery, new String[]{"id"});
+            int index = 1;
+            for (Map.Entry<TaskAttribute, Object> entry: params.entrySet()) {
+                if (entry.getValue() == null) {
+                    ps.setNull(index, entry.getKey().typeOfAttribute);
+                } else if (entry.getValue() instanceof String) {
+                    ps.setString(index, (String) entry.getValue());
+                }else if(entry.getValue() instanceof Integer){
+                    ps.setInt(index, (Integer) entry.getValue());
+                }else if(entry.getValue() instanceof Double){
+                    ps.setDouble(index, (Double) entry.getValue());
+                }else if(entry.getValue() instanceof Boolean){
+                    ps.setBoolean(index, (Boolean) entry.getValue());
+                }else if(entry.getValue() instanceof LocalDateTime){
+                    ps.setDate(index, Date.valueOf(((LocalDateTime) entry.getValue()).toLocalDate()));
+                }else if(entry.getValue() instanceof Priority){
+                    ps.setString(index, (((Priority) entry.getValue()).name()));
+                }
+                index++;
             }
+            return ps;
+        }, new GeneratedKeyHolder()));
+
+
+        task.setId(taskId);
+
+        return task;
+    }
+
+
+    //check that row in DB exist and that task is not deleted
+    private boolean taskExists(TaskId id) {
+        int count = jdbcTemplate.queryForObject("select count(*) from TASKS where ID=?", new Integer[]{id.getValue()}, Integer.class);
+        if (count  == 0){
+            return false;
+        }
+        int deleted = jdbcTemplate.queryForObject("select IS_DELETED from TASKS where ID=?", new Integer[]{id.getValue()}, Integer.class);
+        if (deleted  == 1){
+            return false;
         }
         return true;
     }
 
-    public Task getNewTask(){
 
-    };
+    private List<Task> getTasksByDate(String typeOfTime, LocalDateTime time) {
 
-    private void updateTask(Task task, Task taskFromDB) {
-        if(!task.getTitle().equals(taskFromDB.getTitle())){
-            jdbcTemplate.update("update TASKS set task_title=? where task_id=?" task.getTitle(), task.getId().getValue() );
+        List<Task> tasks = new ArrayList<>();
+        List<Integer> idsOfTasks = jdbcTemplate.queryForList("select ID from TASKS where " + typeOfTime + "=? and ID_DELETED=0", new Object[]{Date.valueOf(time.toLocalDate())}, Integer.class);
+        for(int taskId : idsOfTasks){
+            tasks.add(getTask(new TaskId(taskId)));
         }
-        if(!CollectionUtils.isEqualCollection(task.getSubTasks(), taskFromDB.getSubTasks()){
-            updateSubtasks(task.getSubTasks(), taskFromDB.getSubTasks());
-        }
+
+        return tasks;
+
     }
 
 
-    public List<Task> getSubTasksForTask(Project project, Task task) {
-        List<Task> subTasks = jdbcTemplate.query(SQL_GET_SUBTASKS_FOR_TASK, new TaskMapper(), task.getId().getValue());
+
+   public List<Task> getSubTasksForTask(Project project, Task task) {
+        List<Task> subTasks = jdbcTemplate.query("select TITLE, DEADLINE, DESCRIPTION, IS_DONE, REMIND_DATE, PRIORITY, PERCENT_OF_READINESS" +
+                "IS_DELETED from TASKS where PARENT_TASK_ID=? and IS_DELETED=0", new TaskMapper(), task.getId().getValue());
         if(!subTasks.isEmpty()){
             for(Task subTask: subTasks){
                 subTask.setProject(project);
@@ -172,11 +226,54 @@ public abstract class TaskDAOImpl implements TaskDAO {
     }
 
 
-
-    private void updateSubtasks(List<Task> subTasks, List<Task> subTasks1) {
-
+    private TaskId getTaskParentId(TaskId id) {
+        Integer parentTaskId = jdbcTemplate.queryForObject("select ID from TASKS where ID in (select PARENT_TASK_ID from TASKS where ID=?) and IS_DELETED=0", Integer.class, id.getValue());
+        if(parentTaskId != null){
+            return new TaskId(parentTaskId);
+        }
+        return null;
     }
 
+    private Task getTask(List<Task> tasks, TaskId id) {
+        for (Task task : tasks) {
+            if (task.getId().equals(id)) {
+                return task;
+            }
+            Task childTask = getTask(task.getSubTasks(), id);
+            if (childTask != null) {
+                return childTask;
+            }
+        }
+        return null;
+    }
 
+    private ProjectId getTaskProject(TaskId id) {
+        return new ProjectId(jdbcTemplate.queryForObject("select PROJECT_ID from TASKS where ID=?", Integer.class, id.getValue()));
+    }
+
+    private boolean isProjectTask(TaskId id) {
+        return !jdbcTemplate.queryForObject("select IS_DELETED_FROM_PROJECT from TASKS where ID=?", Boolean.class, id.getValue());
+    }
+
+    private List<Task> getSubtasks(Task taskFromDB) {
+        List<Task> subtasks = jdbcTemplate.query("select TITLE, DEADLINE, DESCRIPTION, IS_DONE, REMIND_DATE, PRIORITY, PERCENT_OF_READINESS" +
+                "IS_DELETED from TASKS where PARENT_TASK_ID=? and IS_DELETED=0", new TaskMapper(), taskFromDB.getId().getValue());
+        for (Task subtask : subtasks) {
+            subtask.setParentTask(taskFromDB);
+            subtask.setSubTasks(getSubtasks(subtask));
+        }
+        return subtasks;
+    }
+
+    public List<Task> getTasksFromDBForProject(Project project) {
+        List<Task> tasks = jdbcTemplate.query("select TITLE, DEADLINE, DESCRIPTION, IS_DONE, REMIND_DATE, PRIORITY, PERCENT_OF_READINESS" +
+                "IS_DELETED from TASKS where PROJECT_ID=? and IS_DELETED=0 and IS_DELETED_FROM_PROJECT=0", new TaskMapper(), project.getId().getValue());
+        for(Task task : tasks){
+            task.setProject(project);
+            task.setSubTasks(getSubTasksForTask(project, task));
+        }
+
+        return tasks;
+    }
 
 }

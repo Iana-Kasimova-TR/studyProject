@@ -17,9 +17,9 @@ public class ProjectId {
 
     private final int value;
 
-    public ProjectId() {
-        this.value = ID_GENERATOR.getAndIncrement();
-    }
+ //   public ProjectId() {
+  //      this.value = ID_GENERATOR.getAndIncrement();
+   // }
 
     public ProjectId(int value){
         this.value = value;

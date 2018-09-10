@@ -6,17 +6,13 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="projectDao" class="dao.daoImpl.ProjectDAOImpl" init-method="init" destroy-method="destroy" lazy-init="true" depends-on="taskDao">
+    <bean id="projectDao" class="dao.daoImpl.ProjectDAOImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="taskDAO" ref="taskDao"/>
     </bean>
 
 
-    <bean id="taskFactory" class="services.TaskTitleFactory"/>
-
-    <bean id="newTask" class="domain.Task" scope="prototype"/>
-
-    <bean id="taskDao" class="dao.daoImpl.TaskDAOImpl" init-method="init" destroy-method="destroy" lazy-init="true">
+    <bean id="taskDao" class="dao.daoImpl.TaskDAOImpl">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="projDAO" ref="projectDao"/>
     </bean>

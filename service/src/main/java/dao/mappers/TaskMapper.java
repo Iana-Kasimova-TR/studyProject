@@ -13,18 +13,19 @@ import java.time.ZoneId;
 /**
  * Created by Iana_Kasimova on 03-Sep-18.
  */
-public class TaskMapper implements RowMapper{
+public class TaskMapper implements RowMapper<Task> {
 
     @Override
-    public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Task task = new Task(rs.getString("task_name"));
-        task.setDescription(rs.getString("task_description"));
-        task.setDeadline(LocalDateTime.ofInstant(rs.getDate("task_deadline").toInstant(), ZoneId.systemDefault()));
-        task.setPercentOfReadiness(rs.getLong("task_percent_of_readiness"));
-        task.setPriority(Priority.valueOf(rs.getString("task_priority")));
-        task.setId(new TaskId(rs.getInt("tas_id")));
-        task.setDone(rs.getBoolean("task_is_done"));
-        task.setRemindDate(LocalDateTime.ofInstant(rs.getDate("task_remind_date").toInstant(), ZoneId.systemDefault()));
+    public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Task task = new Task(rs.getString("TITLE"));
+        task.setDescription(rs.getString("DESCRIPTION"));
+        task.setDeadline(LocalDateTime.ofInstant(rs.getDate("DEADLINE").toInstant(), ZoneId.systemDefault()));
+        task.setPercentOfReadiness(rs.getDouble("PERCENT_OF_READINESS"));
+        task.setPriority(Priority.valueOf(rs.getString("PRIORITY")));
+        task.setId(new TaskId(rs.getInt("ID")));
+        task.setDone(rs.getBoolean("IS_DONE"));
+        task.setRemindDate(LocalDateTime.ofInstant(rs.getDate("REMIND_DATE").toInstant(), ZoneId.systemDefault()));
+        task.setDeleted(rs.getBoolean("IS_DELETED"));
         return task;
     }
 }

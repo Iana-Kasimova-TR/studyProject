@@ -14,5 +14,4 @@ public interface ProjectDAO {
     boolean deleteProject(Project project);
 
     Project getProject(ProjectId id);
-
 }
