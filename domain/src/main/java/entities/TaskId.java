@@ -3,11 +3,14 @@ package entities;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by anakasimova on 06/07/2018.
  */
+@Embeddable
 public class TaskId {
 
     private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
@@ -17,9 +20,6 @@ public class TaskId {
         return value;
     }
 
-   // public TaskId() {
-    //    this.value = ID_GENERATOR.getAndIncrement();
-   // }
 
     public TaskId(int value) {
         this.value = value;
@@ -41,7 +41,7 @@ public class TaskId {
         TaskId id = (TaskId) o;
 
         return new EqualsBuilder()
-                .append(id, id.value)
+                .append(value, id.value)
                 .isEquals();
     }
 }

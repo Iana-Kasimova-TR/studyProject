@@ -1,21 +1,30 @@
 package entities;
 
+import entities.equators.TaskEquator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by anakasimova on 05/07/2018.
  */
+@Entity
+@Table(name = "PROJECTS")
 public class Project {
 
+    @Column(name = "TITLE", columnDefinition = "VARCHAR(255)")
     private String title;
+    @Column(name = "DESCRIPTION", columnDefinition = "VARCHAR(255)")
     private String description;
+    @Column(name = "IS_DELETED", columnDefinition = "BOOLEAN")
     private boolean deleted;
     private List<Task> tasks = new ArrayList<>();
+    @EmbeddedId
+    @Column(name = "ID")
     private ProjectId id;
 
     public boolean isDeleted() {
@@ -68,8 +77,8 @@ public class Project {
         return new HashCodeBuilder(17, 37)
                 .append(title)
                 .append(description)
-                .append(tasks)
                 .append(id)
+                .append(deleted)
                 .toHashCode();
     }
 
@@ -87,9 +96,11 @@ public class Project {
                 .append(title, project.title)
                 .append(description, project.description)
                 .append(id, project.id)
+                .append(deleted, project.deleted)
                 .isEquals();
+
         if(isEquals){
-           isEquals = CollectionUtils.isEqualCollection(tasks, project.getTasks());
+           isEquals = CollectionUtils.isEqualCollection(tasks, project.getTasks(), new TaskEquator());
         }
 
         return isEquals;

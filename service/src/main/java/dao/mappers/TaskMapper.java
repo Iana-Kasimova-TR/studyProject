@@ -19,13 +19,20 @@ public class TaskMapper implements RowMapper<Task> {
     public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
         Task task = new Task(rs.getString("TITLE"));
         task.setDescription(rs.getString("DESCRIPTION"));
-        task.setDeadline(LocalDateTime.ofInstant(rs.getDate("DEADLINE").toInstant(), ZoneId.systemDefault()));
+        if(rs.getDate("DEADLINE") != null) {
+            task.setDeadline(LocalDateTime.ofInstant(rs.getDate("DEADLINE").toInstant(), ZoneId.systemDefault()));
+        }
         task.setPercentOfReadiness(rs.getDouble("PERCENT_OF_READINESS"));
-        task.setPriority(Priority.valueOf(rs.getString("PRIORITY")));
+        if(rs.getString("PRIORITY") != null){
+            task.setPriority(Priority.valueOf(rs.getString("PRIORITY")));
+        }
         task.setId(new TaskId(rs.getInt("ID")));
         task.setDone(rs.getBoolean("IS_DONE"));
-        task.setRemindDate(LocalDateTime.ofInstant(rs.getDate("REMIND_DATE").toInstant(), ZoneId.systemDefault()));
+        if(rs.getDate("REMIND_DATE") != null) {
+            task.setRemindDate(LocalDateTime.ofInstant(rs.getDate("REMIND_DATE").toInstant(), ZoneId.systemDefault()));
+        }
         task.setDeleted(rs.getBoolean("IS_DELETED"));
+        task.setDeletedFromProject(rs.getBoolean("IS_DELETED_FROM_PROJECT"));
         return task;
     }
 }

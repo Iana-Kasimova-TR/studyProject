@@ -27,7 +27,10 @@ allprojects{
                      [group: 'org.springframework', name: 'spring-jdbc', version: '5.0.8.RELEASE'],
                      [group: 'org.springframework', name: 'spring-test', version: '5.0.8.RELEASE'],
                      [group:'com.h2database', name: 'h2', version: '1.4.197'],
-                     [group: 'org.apache.commons', name: 'commons-collections4', version: '4.1']
+                     [group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'],
+                     [group: 'javax.persistence', name: 'persistence-api', version: '1.0.2']
+
+
 
          )
     }

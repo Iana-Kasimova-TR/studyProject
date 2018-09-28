@@ -3,11 +3,13 @@ package entities;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.Embeddable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by anakasimova on 06/07/2018.
  */
+@Embeddable
 public class ProjectId {
     private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
 
@@ -17,9 +19,6 @@ public class ProjectId {
 
     private final int value;
 
- //   public ProjectId() {
-  //      this.value = ID_GENERATOR.getAndIncrement();
-   // }
 
     public ProjectId(int value){
         this.value = value;
@@ -41,7 +40,7 @@ public class ProjectId {
         ProjectId id = (ProjectId) o;
 
         return new EqualsBuilder()
-                .append(id, id.value)
+                .append(value, id.value)
                 .isEquals();
     }
 }

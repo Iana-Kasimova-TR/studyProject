@@ -1,10 +1,12 @@
 package entities;
 
 
+import entities.equators.TaskEquator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,20 +14,44 @@ import java.util.List;
 /**
  * Created by anakasimova on 05/07/2018.
  */
+@Entity
+@Table(name = "TASKS")
 public class Task {
 
+    @Column(name = "DESCRIPTION", columnDefinition = "VARCHAR(255)")
     private String description;
+    @Column(name = "TITLE", columnDefinition = "VARCHAR(255)")
     private String title;
+    @Column(name = "IS_DONE", columnDefinition = "BOOLEAN")
     private boolean isDone = false;
     private List<Task> subTasks = new ArrayList<>();
+    @Column(name = "DEADLINE", columnDefinition = "DATE")
     private LocalDateTime deadline;
+    @Column(name = "REMIND_DATE", columnDefinition = "DATE")
     private LocalDateTime remindDate;
+    @Column(name = "PRIORITY", columnDefinition = "VARCHAR(255)")
     private Priority priority;
+    @Column(name = "PERCENT_OF_READINESS", columnDefinition = "DOUBLE")
     private double percentOfReadiness;
+    @Column(name = "PARENT_TASK_ID", columnDefinition = "INT")
     private Task parentTask;
+    @EmbeddedId
+    @Column(name = "ID")
     private  TaskId id;
+    @Column(name = "PROJECT_ID", columnDefinition = "INT")
     private Project project;
-    private boolean deleted;
+    @Column(name = "IS_DELETED", columnDefinition = "BOOLEAN")
+    private boolean deleted = false;
+    @Column(name = "IS_DELETED_FROM_PROJECT", columnDefinition = "BOOLEAN")
+    private boolean deletedFromProject = false;
+
+    public boolean isDeletedFromProject() {
+        return deletedFromProject;
+    }
+
+    public void setDeletedFromProject(boolean deletedFromProject) {
+        this.deletedFromProject = deletedFromProject;
+    }
 
     public boolean isDeleted() {
         return deleted;
@@ -132,13 +158,13 @@ public class Task {
                 .append(title)
                 .append(description)
                 .append(isDone)
-                .append(subTasks)
                 .append(deadline)
                 .append(remindDate)
                 .append(priority)
-                .append(percentOfReadiness)
                 .append(parentTask)
-                .append(project)
+                .append(percentOfReadiness)
+                .append(deleted)
+                .append(deletedFromProject)
                 .toHashCode();
     }
 
@@ -152,6 +178,10 @@ public class Task {
 
         Task task = (Task) o;
 
+        //позднее связывание, ранее, char unsigned, from long to double, first about test, STRING POOL IN METASPACE, для кадого потока свой стек, массивы хранятся в хипе
+        //фантом чтобы логировать удаленные обьекты, софт удаляется когда память кончаестя, а вик сразу
+        //iterator in foreach if количество модификаций изменилось(удаление) выкидывает exception
+
         isEquals =  new EqualsBuilder()
                 .append(id, task.id)
                 .append(title, task.title)
@@ -163,10 +193,12 @@ public class Task {
                 .append(percentOfReadiness, task.percentOfReadiness)
                 .append(parentTask, task.parentTask)
                 .append(project, task.project)
+                .append(deleted, task.deleted)
+                .append(deletedFromProject, task.deletedFromProject)
                 .isEquals();
 
         if(isEquals){
-            isEquals = CollectionUtils.isEqualCollection(subTasks, task.getSubTasks());
+            isEquals = CollectionUtils.isEqualCollection(subTasks, task.getSubTasks(), new TaskEquator());
         }
 
         return isEquals;
