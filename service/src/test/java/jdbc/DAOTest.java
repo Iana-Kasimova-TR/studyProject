@@ -81,7 +81,7 @@ public class DAOTest {
         task.setProject(project);
         projectDAO.saveOrUpdateProject(project);
         taskDAO.saveOrUpdateTask(task);
-        Assert.assertTrue(projectDAO.deleteProject(project));
+
         Assert.assertTrue(taskDAO.getTask(task.getId()).getProject() == null);
     }
 
@@ -93,7 +93,6 @@ public class DAOTest {
         task.setProject(project);
         projectDAO.saveOrUpdateProject(project);
         taskDAO.saveOrUpdateTask(task);
-        taskDAO.deleteTask(task);
         Assert.assertTrue(projectDAO.getProject(project.getId()).getTasks().isEmpty());
 
     }

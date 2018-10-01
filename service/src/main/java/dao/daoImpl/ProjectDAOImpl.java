@@ -52,26 +52,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         return daoManager.saveEntity(project);
     }
 
-
-    @Override
-    public boolean deleteProject(Project project){
-
-        if(project == null){
-            throw new RuntimeException("project should not be null!");
-        }
-        //delete project
-        project.setDeleted(true);
-        saveOrUpdateProject(project);
-        //delete task from project
-        for(Task task : project.getTasks()){
-            task.setProject(null);
-            task.setDeletedFromProject(true);
-            taskDAO.saveOrUpdateTask(task);
-        }
-
-        return true;
-    }
-
     @Override
     public Project getProject(ProjectId id) {
         if(id == null){
@@ -82,7 +62,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             return null;
         }
 
-        Project projectFromDB = (Project) jdbcTemplate.queryForObject("select * from PROJECTS WHERE ID=?", new ProjectMapper(), id.getValue());
+        Project projectFromDB = (Project) jdbcTemplate.queryForObject("select count(*) from PROJECTS where ID = ? and IS_DELETED = 0", new ProjectMapper(), id.getValue());
        // projectFromDB.setTasks(taskDAO.getTasksFromDBForProject(projectFromDB));
         Project proxiedProject = (Project) Proxy.newProxyInstance(getClass().getClassLoader(), projectFromDB.getClass().getInterfaces(), new InvocationHandler() {
             @Override

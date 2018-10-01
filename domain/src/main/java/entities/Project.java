@@ -22,6 +22,7 @@ public class Project {
     private String description;
     @Column(name = "IS_DELETED", columnDefinition = "BOOLEAN")
     private boolean deleted;
+    @OneToMany( cascade = CascadeType)
     private List<Task> tasks = new ArrayList<>();
     @EmbeddedId
     @Column(name = "ID")

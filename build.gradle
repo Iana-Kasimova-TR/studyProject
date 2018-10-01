@@ -30,7 +30,8 @@ allprojects{
                      [group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'],
                      [group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'],
                      [group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.6.Final'],
-                     [group: 'org.hibernate', name: 'hibernate-core', version: '5.3.6.Final']
+                     [group: 'org.hibernate', name: 'hibernate-core', version: '5.3.6.Final'],
+                     [group: 'org.springframework', name: 'spring-orm', version: '5.1.0.RELEASE']
 
 
 

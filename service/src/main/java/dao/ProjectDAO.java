@@ -11,7 +11,5 @@ public interface ProjectDAO {
 
     Project saveOrUpdateProject(Project project);
 
-    boolean deleteProject(Project project);
-
     Project getProject(ProjectId id);
 }

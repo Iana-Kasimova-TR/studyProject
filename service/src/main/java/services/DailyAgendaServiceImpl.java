@@ -1,9 +1,9 @@
 package services;
 
-import dao.TaskDAO;
 import entities.DailyAgenda;
 import entities.Project;
 import entities.Task;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,27 +17,26 @@ import javax.inject.Named;
  * Created by anakasimova on 08/07/2018.
  */
 @Named
+@Transactional
 public class DailyAgendaServiceImpl implements DailyAgendaService {
 
     @Inject
-    @Named("taskDAO")
-    private TaskDAO taskDAO;
+    private TaskService taskService;
 
-
-    public void setTaskDAO(TaskDAO taskDAO) {
-        this.taskDAO = taskDAO;
+    public void setTaskService(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @Override
     public DailyAgenda createDailyAgenda(LocalDateTime dailyDate) {
-        List<Task> tasks = taskDAO.getTasksByFinishDate(dailyDate);
+        List<Task> tasks = taskService.findTaskByDeadline(dailyDate);
         DailyAgenda dailyAgenda = new DailyAgenda(dailyDate, tasks);
         return dailyAgenda;
     }
 
     @Override
     public DailyAgenda createDailyAgenda(LocalDateTime dailyDate, List<Project> projects, List<Task> tasks) {
-        List<Task> neededTasks = taskDAO.getTasksByFinishDate(dailyDate);
+        List<Task> neededTasks = taskService.findTaskByDeadline(dailyDate);
         List<Task> allTasks = new ArrayList<>();
         for (Project project : projects) {
             allTasks.addAll(project.getTasks());
@@ -47,4 +46,6 @@ public class DailyAgendaServiceImpl implements DailyAgendaService {
         DailyAgenda dailyAgenda = new DailyAgenda(dailyDate, new ArrayList<>(new HashSet<>(allTasks)));
         return dailyAgenda;
     }
+
+
 }

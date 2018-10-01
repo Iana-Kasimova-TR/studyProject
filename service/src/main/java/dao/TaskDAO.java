@@ -14,8 +14,6 @@ public interface TaskDAO {
 
     Task saveOrUpdateTask(Task task);
 
-    boolean deleteTask(Task task);
-
     Task getTask(TaskId id);
 
     List<Task> getTasksByFinishDate(LocalDateTime time);

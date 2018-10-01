@@ -98,22 +98,6 @@ public class TaskDAOImpl implements TaskDAO {
 
 
     @Override
-    public boolean deleteTask(Task task){
-        if(task == null){
-            throw new RuntimeException("task should not be null!");
-        }
-        task.setDeleted(true);
-        for (Task subtask : task.getSubTasks()) {
-            subtask.setDeleted(true);
-            saveOrUpdateTask(subtask);
-        }
-        saveOrUpdateTask(task);
-
-        return true;
-    }
-
-
-    @Override
     public Task saveOrUpdateTask(Task task) {
         if(task == null){
             throw new RuntimeException("task should not be null!");
@@ -125,7 +109,7 @@ public class TaskDAOImpl implements TaskDAO {
 
     //check that row in DB exist and that task is not deleted
     private boolean taskExists(TaskId id) {
-        int count = jdbcTemplate.queryForObject("select count(*) from TASKS where ID=?", new Integer[]{id.getValue()}, Integer.class);
+        int count = jdbcTemplate.queryForObject("select count(*) from TASKS where ID = ? and IS_DELETED = 0", new Integer[]{id.getValue()}, Integer.class);
         if (count  == 0){
             return false;
         }
@@ -190,7 +174,7 @@ public class TaskDAOImpl implements TaskDAO {
     }
 
     private ProjectId getTaskProject(TaskId id) {
-        return new ProjectId(jdbcTemplate.queryForObject("select PROJECT_ID from TASKS where ID=?", Integer.class, id.getValue()));
+        return new ProjectId(jdbcTemplate.queryForObject("select PROJECT_ID from TASKS where ID=? ", Integer.class, id.getValue()));
     }
 
     private boolean isProjectTask(TaskId id) {

@@ -2,14 +2,19 @@ package services;
 
 import dao.TaskDAO;
 import entities.Task;
+import org.springframework.transaction.annotation.Transactional;
+import utils.StringUtil;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by anakasimova on 08/07/2018.
  */
 @Named
+@Transactional
 public class TaskServiceImpl implements TaskService {
 
     @Inject
@@ -28,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task createTask(String title) {
-        if(title.trim().isEmpty()){
+        if(StringUtil.isEmpty(title)){
             throw new RuntimeException("you cannot create task without title!");
         }
         Task task = new Task(title);
@@ -73,7 +78,6 @@ public class TaskServiceImpl implements TaskService {
         subTask.setParentTask(null);
         if(parentTask.getProject() != null){
            projectService.deleteTaskFromProject(parentTask.getProject(), subTask);
-            return saveTask(parentTask);
         }
         saveTask(subTask);
         return saveTask(parentTask);
@@ -87,6 +91,15 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
+    @Override
+    public List<Task> findTaskByDeadline(LocalDateTime dateTime) {
+        return taskDAO.getTasksByFinishDate(dateTime);
+    }
+
+    @Override
+    public List<Task> findTaskByRemind(LocalDateTime dateTime) {
+        return taskDAO.getTasksByRemindDate(dateTime);
+    }
 
 
 }
