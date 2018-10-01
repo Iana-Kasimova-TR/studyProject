@@ -1,5 +1,6 @@
 package dao.daoImpl;
 
+import com.sun.deploy.net.proxy.DynamicProxyManager;
 import dao.ProjectDAO;
 import dao.mappers.ProjectMapper;
 import dao.utils.DaoClassManager;
@@ -10,6 +11,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * Created by anakasimova on 24/07/2018.
@@ -79,8 +83,19 @@ public class ProjectDAOImpl implements ProjectDAO {
         }
 
         Project projectFromDB = (Project) jdbcTemplate.queryForObject("select * from PROJECTS WHERE ID=?", new ProjectMapper(), id.getValue());
-        projectFromDB.setTasks(taskDAO.getTasksFromDBForProject(projectFromDB));
-        return  projectFromDB;
+       // projectFromDB.setTasks(taskDAO.getTasksFromDBForProject(projectFromDB));
+        Project proxiedProject = (Project) Proxy.newProxyInstance(getClass().getClassLoader(), projectFromDB.getClass().getInterfaces(), new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                if (method.getName().equals("getTasks")) {
+                    if (projectFromDB.getTasks().isEmpty()) {
+                        projectFromDB.setTasks(taskDAO.getTasksFromDBForProject(projectFromDB));
+                    }
+                }
+                return method.invoke(projectFromDB, args);
+            }
+        });
+        return  proxiedProject;
 
     }
 
