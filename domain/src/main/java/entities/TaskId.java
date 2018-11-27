@@ -2,26 +2,27 @@ package entities;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
+import javax.persistence.GeneratedValue;
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by anakasimova on 06/07/2018.
  */
-@Embeddable
-public class TaskId {
+public class TaskId implements Serializable{
 
-    private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
-    private final int value;
+    private int value;
 
     public int getValue() {
         return value;
     }
 
-
-    public TaskId(int value) {
+    public TaskId(Integer value) {
         this.value = value;
     }
 

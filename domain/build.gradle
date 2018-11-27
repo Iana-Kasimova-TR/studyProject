@@ -1,4 +1,10 @@
+plugins {
+    id "com.scalified.plugins.gradle.metamodel" version "0.0.1"
+}
+
 group 'epam.com.studyProject'
 version '1.0-SNAPSHOT'
+
+
 
 

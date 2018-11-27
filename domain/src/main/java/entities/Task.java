@@ -2,11 +2,17 @@ package entities;
 
 
 import entities.equators.TaskEquator;
+import entities.hibernateusertype.TaskIdHibernateUserType;
+import entities.hibernateusertype.TaskIdUserType;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,35 +21,52 @@ import java.util.List;
  * Created by anakasimova on 05/07/2018.
  */
 @Entity
-@Table(name = "TASKS")
-public class Task {
+@Table(name = "Task")
+@TypeDef(typeClass = TaskIdHibernateUserType.class, defaultForType = TaskId.class)
+public class Task  implements Serializable {
 
-    @Column(name = "DESCRIPTION", columnDefinition = "VARCHAR(255)")
+    @Column(name = "DESCRIPTION")
     private String description;
-    @Column(name = "TITLE", columnDefinition = "VARCHAR(255)")
+    @Column(name = "TITLE")
     private String title;
-    @Column(name = "IS_DONE", columnDefinition = "BOOLEAN")
+    @Column(name = "IS_DONE")
     private boolean isDone = false;
+    @OneToMany(mappedBy = "parentTask", fetch = FetchType.LAZY)
     private List<Task> subTasks = new ArrayList<>();
-    @Column(name = "DEADLINE", columnDefinition = "DATE")
+    @Column(name = "DEADLINE")
     private LocalDateTime deadline;
-    @Column(name = "REMIND_DATE", columnDefinition = "DATE")
+    @Column(name = "REMIND_DATE")
     private LocalDateTime remindDate;
-    @Column(name = "PRIORITY", columnDefinition = "VARCHAR(255)")
+    @Column(name = "PRIORITY")
     private Priority priority;
-    @Column(name = "PERCENT_OF_READINESS", columnDefinition = "DOUBLE")
+    @Column(name = "PERCENT_OF_READINESS")
     private double percentOfReadiness;
-    @Column(name = "PARENT_TASK_ID", columnDefinition = "INT")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_TASK_ID")
     private Task parentTask;
-    @EmbeddedId
-    @Column(name = "ID")
-    private  TaskId id;
-    @Column(name = "PROJECT_ID", columnDefinition = "INT")
+    @Id
+    @GeneratedValue(generator = "custom-generator")
+    @GenericGenerator(name = "custom-generator",
+            strategy = "utils.CustomIdGenerator")
+    private TaskId id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PROJECT_ID")
     private Project project;
-    @Column(name = "IS_DELETED", columnDefinition = "BOOLEAN")
+
+    @Column(name = "IS_DELETED")
     private boolean deleted = false;
-    @Column(name = "IS_DELETED_FROM_PROJECT", columnDefinition = "BOOLEAN")
+    @Column(name = "IS_DELETED_FROM_PROJECT")
     private boolean deletedFromProject = false;
+
+    public Task() {
+    }
+
+    public Task(String description, String title) {
+        this.description = description;
+        this.title = title;
+    }
 
     public boolean isDeletedFromProject() {
         return deletedFromProject;

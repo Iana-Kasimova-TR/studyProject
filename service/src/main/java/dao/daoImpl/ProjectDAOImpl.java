@@ -1,25 +1,26 @@
 package dao.daoImpl;
 
-import com.sun.deploy.net.proxy.DynamicProxyManager;
 import dao.ProjectDAO;
 import dao.mappers.ProjectMapper;
 import dao.utils.DaoClassManager;
 import entities.Project;
 import entities.ProjectId;
-import entities.Task;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Collection;
 
 /**
  * Created by anakasimova on 24/07/2018.
  */
-@Named
+// @Named
 public class ProjectDAOImpl implements ProjectDAO {
+
+    private static final Logger LOGGER = Logger.getLogger(ProjectDAOImpl.class.getName());
 
     @Inject
     private TaskDAOImpl taskDAO;
@@ -63,8 +64,8 @@ public class ProjectDAOImpl implements ProjectDAO {
         }
 
         Project projectFromDB = (Project) jdbcTemplate.queryForObject("select count(*) from PROJECTS where ID = ? and IS_DELETED = 0", new ProjectMapper(), id.getValue());
-       // projectFromDB.setTasks(taskDAO.getTasksFromDBForProject(projectFromDB));
-        Project proxiedProject = (Project) Proxy.newProxyInstance(getClass().getClassLoader(), projectFromDB.getClass().getInterfaces(), new InvocationHandler() {
+        Project proxiedProject = (Project) Proxy.newProxyInstance(getClass().getClassLoader(), projectFromDB.getClass().getInterfaces(),
+                new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 if (method.getName().equals("getTasks")) {
@@ -91,5 +92,9 @@ public class ProjectDAOImpl implements ProjectDAO {
         return true;
     }
 
-
+    @Override
+    public Collection<Project> findAll() {
+        LOGGER.info("ProjectDAOImpl");
+        return null;
+    }
 }

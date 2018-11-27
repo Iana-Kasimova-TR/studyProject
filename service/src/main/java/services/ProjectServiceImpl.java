@@ -2,17 +2,23 @@ package services;
 
 import dao.ProjectDAO;
 import entities.Project;
+import entities.ProjectId;
 import entities.Task;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utils.StringUtil;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Collection;
 
 /**
  * Created by anakasimova on 08/07/2018.
  */
-@Named
+//@Named
+@Service
+@Lazy
 @Transactional
 public class ProjectServiceImpl implements ProjectService {
 
@@ -26,6 +32,13 @@ public class ProjectServiceImpl implements ProjectService {
         this.projectDAO = projectDAO;
     }
 
+    public void setTaskService(TaskService taskService) { this.taskService = taskService; }
+
+    @Override
+    public Collection<Project> findAll() {
+        return projectDAO.findAll();
+    }
+
     @Override
     public Project createProject(String title) {
       if(StringUtil.isEmpty(title)){
@@ -33,6 +46,15 @@ public class ProjectServiceImpl implements ProjectService {
       }
       Project project = new Project(title);
       return projectDAO.saveOrUpdateProject(project);
+    }
+
+    @Override
+    public Project createProject(String title, String description) {
+        if(StringUtil.isEmpty(title)){
+            throw new RuntimeException("you cannot create project with empty title");
+        }
+        Project project = new Project(title, description);
+        return projectDAO.saveOrUpdateProject(project);
     }
 
     @Override
@@ -72,5 +94,10 @@ public class ProjectServiceImpl implements ProjectService {
         taskService.saveTask(task);
         return saveProject(project);
 
+    }
+
+    @Override
+    public Project findProjectById(ProjectId id) {
+       return projectDAO.getProject(id);
     }
 }

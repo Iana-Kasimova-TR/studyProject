@@ -1,17 +1,19 @@
 package config;
 
+import dependencyInversion.context.Configuration;
+import entities.Project;
+import entities.Task;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -22,7 +24,8 @@ import java.util.Properties;
  */
 @Configuration
 @PropertySource("classpath:configuration.properties")
-@ComponentScan("dao")
+@ComponentScan({"dao", "services"})
+@EnableTransactionManagement
 public class ServiceConfiguration {
 
     @Inject
@@ -32,16 +35,16 @@ public class ServiceConfiguration {
     public LocalSessionFactoryBean sessionFactory(){
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(
-                new String[] { "entities" });
+        sessionFactory.setAnnotatedClasses(
+                Project.class,
+                Task.class
+        );
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
 
     @Bean
-    @Autowired
-    public HibernateTransactionManager transactionManager(
-            SessionFactory sessionFactory) {
+    public PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
 
         HibernateTransactionManager txManager
                 = new HibernateTransactionManager();
@@ -49,6 +52,7 @@ public class ServiceConfiguration {
 
         return txManager;
     }
+
 
     @Bean
     DataSource dataSource() {
@@ -65,10 +69,7 @@ public class ServiceConfiguration {
         return new JdbcTemplate(dataSource());
     }
 
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-        return new PersistenceExceptionTranslationPostProcessor();
-    }
+
 
     Properties hibernateProperties() {
         return new Properties() {
@@ -83,5 +84,7 @@ public class ServiceConfiguration {
         };
     }
 
-
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 }

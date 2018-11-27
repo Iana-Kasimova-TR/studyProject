@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * Created by anakasimova on 24/07/2018.
  */
-@Named
+// @Named
 public class TaskDAOImpl implements TaskDAO {
 
     @Inject
@@ -94,6 +94,11 @@ public class TaskDAOImpl implements TaskDAO {
         }
 
         return getTasksByDate("REMIND_DATE", time);
+    }
+
+    @Override
+    public Collection<Task> getAllTasks() {
+        return null;
     }
 
 

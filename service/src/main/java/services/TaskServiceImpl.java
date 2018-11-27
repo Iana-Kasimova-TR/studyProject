@@ -2,19 +2,23 @@ package services;
 
 import dao.TaskDAO;
 import entities.Task;
+import entities.TaskId;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utils.StringUtil;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by anakasimova on 08/07/2018.
  */
-@Named
+//@Named
 @Transactional
+@Service
 public class TaskServiceImpl implements TaskService {
 
     @Inject
@@ -37,6 +41,15 @@ public class TaskServiceImpl implements TaskService {
             throw new RuntimeException("you cannot create task without title!");
         }
         Task task = new Task(title);
+        return saveTask(task);
+    }
+
+    @Override
+    public Task createTask(String title, String description) {
+        if(StringUtil.isEmpty(title)){
+            throw new RuntimeException("you cannot create task without title!");
+        }
+        Task task = new Task(title, description);
         return saveTask(task);
     }
 
@@ -99,6 +112,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> findTaskByRemind(LocalDateTime dateTime) {
         return taskDAO.getTasksByRemindDate(dateTime);
+    }
+
+    @Override
+    public Task findTaskById(TaskId id) {
+        return taskDAO.getTask(id);
+    }
+
+    @Override
+    public Collection<Task> findAll() {
+        return taskDAO.getAllTasks();
     }
 
 

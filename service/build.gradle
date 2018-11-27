@@ -1,9 +1,9 @@
 group 'epam.com.studyProject'
 version '1.0-SNAPSHOT'
 
-
-
 dependencies {
+    compile project(':domain')
     compile group: 'javax.inject', name: 'javax.inject', version: '1'
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
 
 }

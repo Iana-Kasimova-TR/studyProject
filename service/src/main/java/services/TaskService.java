@@ -2,8 +2,10 @@ package services;
 
 import entities.Task;
 import dependencyInversion.validation.NonNull;
+import entities.TaskId;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,6 +14,8 @@ import java.util.List;
 public interface TaskService {
 
     Task createTask(@NonNull String title);
+
+    Task createTask(@NonNull String title, @NonNull String description);
 
     Task saveTask(@NonNull Task task);
 
@@ -26,5 +30,9 @@ public interface TaskService {
     List<Task> findTaskByDeadline(LocalDateTime dateTime);
 
     List<Task> findTaskByRemind(LocalDateTime dateTime);
+
+    Task findTaskById(TaskId id);
+
+    Collection<Task> findAll();
 
 }

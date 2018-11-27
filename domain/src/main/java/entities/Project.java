@@ -1,11 +1,15 @@
 package entities;
 
 import entities.equators.TaskEquator;
+import entities.hibernateusertype.ProjectIdHibernateUserType;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +17,26 @@ import java.util.List;
  * Created by anakasimova on 05/07/2018.
  */
 @Entity
-@Table(name = "PROJECTS")
-public class Project {
+@Table(name = "Project")
+@TypeDef(typeClass = ProjectIdHibernateUserType.class, defaultForType = ProjectId.class)
+public class Project implements Serializable {
 
-    @Column(name = "TITLE", columnDefinition = "VARCHAR(255)")
+    @Column(name = "TITLE")
     private String title;
-    @Column(name = "DESCRIPTION", columnDefinition = "VARCHAR(255)")
+    @Column(name = "DESCRIPTION")
     private String description;
-    @Column(name = "IS_DELETED", columnDefinition = "BOOLEAN")
+    @Column(name = "IS_DELETED")
     private boolean deleted;
-    @OneToMany( cascade = CascadeType)
+    @OneToMany( mappedBy = "project", fetch = FetchType.LAZY)
     private List<Task> tasks = new ArrayList<>();
-    @EmbeddedId
-    @Column(name = "ID")
+    @Id
+    @GeneratedValue(generator = "custom-generator")
+    @GenericGenerator(name = "custom-generator",
+            strategy = "utils.CustomIdGenerator")
     private ProjectId id;
+
+    public Project() {
+    }
 
     public boolean isDeleted() {
         return deleted;
@@ -42,6 +52,11 @@ public class Project {
 
     public Project(String title) {
         this.title = title;
+    }
+
+    public Project(String title, String description) {
+        this.title = title;
+        this.description = description;
     }
 
     public String getTitle() {

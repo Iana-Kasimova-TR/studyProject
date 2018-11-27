@@ -4,6 +4,7 @@ import entities.Task;
 import entities.TaskId;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -19,5 +20,7 @@ public interface TaskDAO {
     List<Task> getTasksByFinishDate(LocalDateTime time);
 
     List<Task> getTasksByRemindDate(LocalDateTime time);
+
+    Collection<Task> getAllTasks();
 
 }

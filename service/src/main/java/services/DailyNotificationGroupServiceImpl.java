@@ -5,6 +5,8 @@ import entities.DailyNotificationGroup;
 import entities.Project;
 import entities.Task;
 import dependencyInversion.validation.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -16,8 +18,9 @@ import java.util.List;
 /**
  * Created by anakasimova on 08/07/2018.
  */
-@Named
+//@Named
 @Transactional
+@Service
 public class DailyNotificationGroupServiceImpl implements DailyNotificationGroupService {
 
     @Inject

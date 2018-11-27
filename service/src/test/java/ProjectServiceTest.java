@@ -1,3 +1,4 @@
+import config.ServiceConfiguration;
 import dao.ProjectDAO;
 import dao.TaskDAO;
 import entities.Project;
@@ -6,6 +7,11 @@ import mockDao.InMemoryProjectDao;
 import mockDao.InMemoryTaskDao;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import services.ProjectService;
 import services.ProjectServiceImpl;
 import services.TaskService;
@@ -15,40 +21,34 @@ import static org.assertj.core.api.Assertions.*;
 /**
  * Created by anakasimova on 10/07/2018.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {ServiceConfiguration.class})
+@Transactional
 public class ProjectServiceTest {
 
-   /* private ProjectDAO projectDAO;
-    private TaskDAO taskDAO;
+    @Autowired
     private ProjectService projectService;
+
+    @Autowired
     private TaskService taskService;
+
     private Project project;
     private String title;
 
     @Before
     public void init(){
-        taskDAO = new InMemoryTaskDao();
-        projectDAO = new InMemoryProjectDao();
-        taskService = new TaskServiceImpl();
-        projectService = new ProjectServiceImpl();
-        taskService.setTaskDAO(taskDAO);
-        projectService.setProjectDAO(projectDAO);
-        taskService.setProjectService(projectService);
         title = "Rome";
         project = projectService.createProject(title);
     }
 
 
     @Test
-    public void testCreateProject(){
-
-        assertThat(projectDAO.getProject(project.getValue())).isEqualTo(project);
-    }
-
-    @Test
     public void testSaveProject(){
         String description = "Adventures in Rome";
         project.setDescription(description);
-        assertThat(projectService.saveOrUpdateProject(project).getDescription()).isEqualTo(project.getDescription());
+        projectService.saveProject(project);
+        projectService.findAll();
+        assertThat(projectService.findProjectById(project.getId()).getDescription()).isEqualTo(project.getDescription());
     }
 
     @Test
@@ -60,17 +60,15 @@ public class ProjectServiceTest {
     public void testAddTaskToProject(){
         Task task = new Task("task");
         assertThat(projectService.addTaskToProject(project, task).getTasks().contains(task)).isTrue();
-        assertThat(taskService.saveOrUpdateTask(task).getProject()).isEqualTo(project);
+        assertThat(taskService.saveTask(task).getProject()).isEqualTo(project);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDeleteTaskFromProject(){
         Task task = new Task("task");
-        project = projectService.addTaskToProject(project, task);
-        task = taskService.saveOrUpdateTask(task);
-
+        projectService.addTaskToProject(project, task);
         task.setProject(null);
         assertThat(projectService.deleteTaskFromProject(project, task).getTasks().contains(task)).isFalse();
-        assertThat(taskService.saveOrUpdateTask(task).getProject()).isNull();
-    }*/
+        assertThat(taskService.saveTask(task).getProject()).isNull();
+    }
 }

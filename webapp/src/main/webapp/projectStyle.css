@@ -1,0 +1,21 @@
+.inputText{
+    padding:5px;
+    border:2px solid #ccc;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border-color:#333;
+}
+
+.btnSubmit{
+    padding:5px 15px;
+    background:#ccc;
+    background-color: green;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.btnCreate{
+    background-color: blue;
+    }
