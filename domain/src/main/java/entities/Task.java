@@ -31,7 +31,7 @@ public class Task  implements Serializable {
     private String title;
     @Column(name = "IS_DONE")
     private boolean isDone = false;
-    @OneToMany(mappedBy = "parentTask", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parentTask", fetch = FetchType.EAGER)
     private List<Task> subTasks = new ArrayList<>();
     @Column(name = "DEADLINE")
     private LocalDateTime deadline;
@@ -61,11 +61,13 @@ public class Task  implements Serializable {
     private boolean deletedFromProject = false;
 
     public Task() {
+        this.percentOfReadiness = 0;
     }
 
     public Task(String description, String title) {
         this.description = description;
         this.title = title;
+        this.percentOfReadiness = 0;
     }
 
     public boolean isDeletedFromProject() {
@@ -89,7 +91,7 @@ public class Task  implements Serializable {
     }
 
     public Task(String title) {
-
+        this.percentOfReadiness = 0;
         this.title = title;
     }
 

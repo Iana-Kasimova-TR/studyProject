@@ -24,7 +24,7 @@ import java.util.Properties;
  */
 @Configuration
 @PropertySource("classpath:configuration.properties")
-@ComponentScan({"dao", "services"})
+@ComponentScan({"dao", "services", "controllers", "view"})
 @EnableTransactionManagement
 public class ServiceConfiguration {
 
@@ -45,7 +45,6 @@ public class ServiceConfiguration {
 
     @Bean
     public PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
-
         HibernateTransactionManager txManager
                 = new HibernateTransactionManager();
         txManager.setSessionFactory(sessionFactory);

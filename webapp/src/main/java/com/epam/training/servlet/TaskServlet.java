@@ -27,7 +27,8 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TaskService taskService = applicationContext.getBean(TaskService.class);
-        req.setAttribute("tasks", taskService.findAll());
+        req.setAttribute("tasks", taskService.findAllForProject(req.getParameter("projectID")));
+        req.setAttribute("projectID", req.getParameter("projectID"));
         req.getRequestDispatcher("/tasks.jsp").forward(req, resp);
     }
 }

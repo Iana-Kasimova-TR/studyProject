@@ -27,7 +27,7 @@ public class Project implements Serializable {
     private String description;
     @Column(name = "IS_DELETED")
     private boolean deleted;
-    @OneToMany( mappedBy = "project", fetch = FetchType.LAZY)
+    @OneToMany( mappedBy = "project", fetch = FetchType.EAGER)
     private List<Task> tasks = new ArrayList<>();
     @Id
     @GeneratedValue(generator = "custom-generator")

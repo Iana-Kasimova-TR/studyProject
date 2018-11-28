@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Tasks</title>
-    <link href="http://localhost:8090/webapp-1.0-SNAPSHOT/projectStyle.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     </head>
 <body>
 <table>
@@ -16,7 +16,7 @@
     </c:forEach>
 </table>
 <div class="wrapper">
-<input type="button" class="btnCreate" value="Create new task" onclick="window.location='createTask'"/>
+<input type="button" class="btnCreate" value="Create new task" onclick="location.href='createTask?projectID=${projectID}'"/>
 </div>
 </body>
 </html>

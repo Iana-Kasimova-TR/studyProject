@@ -1,6 +1,8 @@
 package services;
 
 import dao.TaskDAO;
+import entities.Project;
+import entities.ProjectId;
 import entities.Task;
 import entities.TaskId;
 import org.springframework.stereotype.Service;
@@ -45,11 +47,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask(String title, String description) {
+    public Task createTask(String title, String description, String projectId) {
         if(StringUtil.isEmpty(title)){
             throw new RuntimeException("you cannot create task without title!");
         }
         Task task = new Task(title, description);
+        task.setProject(projectService.findProjectById(new ProjectId(Integer.valueOf(projectId))));
         return saveTask(task);
     }
 
@@ -122,6 +125,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Collection<Task> findAll() {
         return taskDAO.getAllTasks();
+    }
+
+    @Override
+    public Collection<Task> findAllForProject(String id){
+        return taskDAO.getTasksForProject(projectService.findProjectById(new ProjectId(Integer.valueOf(id))));
     }
 
 

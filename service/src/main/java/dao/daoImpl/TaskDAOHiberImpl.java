@@ -1,9 +1,7 @@
 package dao.daoImpl;
 
 import dao.TaskDAO;
-import entities.Task;
-import entities.TaskId;
-import entities.Task_;
+import entities.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +71,16 @@ public class TaskDAOHiberImpl implements TaskDAO {
         CriteriaQuery<Task> criteria = builder.createQuery(Task.class);
         Root<Task> root = criteria.from(Task.class);
         criteria.select(root);
+        return getCurrentSession().createQuery(criteria).getResultList();
+    }
+
+    @Override
+    public Collection<Task> getTasksForProject(Project project) {
+        CriteriaBuilder builder = getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Task> criteria = builder.createQuery(Task.class);
+        Root<Task> root = criteria.from(Task.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get(Task_.project), project), builder.equal(root.get(Task_.deleted), false));
         return getCurrentSession().createQuery(criteria).getResultList();
     }
 

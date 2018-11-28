@@ -1,5 +1,6 @@
 package services;
 
+import entities.ProjectId;
 import entities.Task;
 import dependencyInversion.validation.NonNull;
 import entities.TaskId;
@@ -15,7 +16,7 @@ public interface TaskService {
 
     Task createTask(@NonNull String title);
 
-    Task createTask(@NonNull String title, @NonNull String description);
+    Task createTask(@NonNull String title, @NonNull String description, @NonNull String projectId);
 
     Task saveTask(@NonNull Task task);
 
@@ -35,4 +36,5 @@ public interface TaskService {
 
     Collection<Task> findAll();
 
+    Collection<Task> findAllForProject(String id);
 }

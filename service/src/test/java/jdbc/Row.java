@@ -4,7 +4,7 @@ package jdbc;
  * Created by Iana_Kasimova on 28-Aug-18.
  */
 public class Row {
-    private int id;
+   /* private int id;
     private String name;
 
     public int getId() {
@@ -29,5 +29,5 @@ public class Row {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
-    }
+    }*/
 }

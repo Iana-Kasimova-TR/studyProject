@@ -5,7 +5,7 @@ import javax.inject.Inject;
 /**
  * Created by Iana_Kasimova on 19-Aug-18.
  */
-public class BeanWithInjection {
+public class BeanWithInjection {/*
 
     @Inject
     private InjectableBean injectableBean;
@@ -25,5 +25,5 @@ public class BeanWithInjection {
 
     public void setInitWasCalled(boolean initWasCalled) {
         this.initWasCalled = initWasCalled;
-    }
+    }*/
 }

@@ -1,9 +1,7 @@
 package com.epam.training.servlet;
 
 import com.epam.training.utils.ApplicationContextHandler;
-import config.ServiceConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import services.TaskService;
 
 import javax.servlet.ServletException;
@@ -21,6 +19,7 @@ import java.io.IOException;
 public class CreateTaskServlet extends HttpServlet {
 
     private ApplicationContext applicationContext;
+    private String projectId;
 
     @Override
     public void init() throws ServletException {
@@ -32,14 +31,15 @@ public class CreateTaskServlet extends HttpServlet {
         req.setAttribute("defaultDescription", "");
         req.setAttribute("title", "Input title");
         req.setAttribute("description", "Input description");
+        projectId = req.getParameter("projectID");
         req.getRequestDispatcher("/createTask.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         TaskService taskService = applicationContext.getBean(TaskService.class);
-        taskService.createTask(req.getParameter("title"), req.getParameter("description"));
-        req.setAttribute("tasks", taskService.findAll());
-        resp.sendRedirect(req.getContextPath() + "/tasks");
+        taskService.createTask(req.getParameter("title"), req.getParameter("description"), projectId);
+        req.setAttribute("tasks", taskService.findAllForProject(projectId));
+        resp.sendRedirect(req.getContextPath() + "/tasks?projectID=" + projectId);
     }
 }

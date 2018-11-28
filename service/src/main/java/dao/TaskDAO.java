@@ -1,5 +1,7 @@
 package dao;
 
+import entities.Project;
+import entities.ProjectId;
 import entities.Task;
 import entities.TaskId;
 
@@ -23,4 +25,5 @@ public interface TaskDAO {
 
     Collection<Task> getAllTasks();
 
+    Collection<Task> getTasksForProject(Project project);
 }

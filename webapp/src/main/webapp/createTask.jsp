@@ -3,17 +3,11 @@
 <head>
     <title>CreateTask</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <link href="<%= request.getContextPath() %>/projectStyle.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     </link>
 </head>
 <body>
 
-<script>
-function doSubmit()
-{
-window.transfer("register.jsp","_self");
-}
-</script>
 
 <section>
     <form method="post" action="<%= request.getContextPath() %>/createTask">
@@ -25,7 +19,7 @@ window.transfer("register.jsp","_self");
             <dt>Description: </dt>
             <dd><input type="text" class="inputText" name="description" id="description-field" value="${defaultDescription}" placeholder="${description}" /></dd>
         </dl>
-        <button type="submit" id="submit-button" class="btnSubmit" onclick="doSubmit()">Save</button>
+        <button type="submit" id="submit-button" class="btnSubmit">Save</button>
     </form>
 </section>
 

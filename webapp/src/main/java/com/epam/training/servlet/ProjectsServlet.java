@@ -1,10 +1,9 @@
 package com.epam.training.servlet;
 
 import com.epam.training.utils.ApplicationContextHandler;
-import config.ServiceConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import services.ProjectService;
+import controllers.ProjectController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,8 +27,8 @@ public class ProjectsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ProjectService projectService = applicationContext.getBean(ProjectService.class);
-        req.setAttribute("projects", projectService.findAll());
+        ProjectController controller = applicationContext.getBean(ProjectController.class);
+        controller.transform(req, resp);
         req.getRequestDispatcher("/projects.jsp").forward(req, resp);
     }
 }

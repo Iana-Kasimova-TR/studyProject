@@ -101,6 +101,11 @@ public class TaskDAOImpl implements TaskDAO {
         return null;
     }
 
+    @Override
+    public Collection<Task> getTasksForProject(Project project) {
+        return null;
+    }
+
 
     @Override
     public Task saveOrUpdateTask(Task task) {
